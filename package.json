@@ -1,0 +1,23 @@
+{
+  "name": "audio-player2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder build --win --publish never",
+    "deploy": "electron-builder build --win --publish always"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sleepy-Reacon/Audio-Player.git"
+  },
+  "keywords": [],
+  "author": "Christoph Koschel",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^11.0.3",
+    "electron-builder": "^22.9.1",
+    "electron-updater": "^4.3.5"
+  }
+}
