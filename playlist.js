@@ -1,3 +1,6 @@
+import {path} from "./node.js";
+import {setMusicTitle} from "./ui.js";
+
 let playlist = [];
 let currentCase = -1;
 let repeat = false;
@@ -12,19 +15,25 @@ export function clearPlaylist() {
 }
 
 export function nextCase() {
-    if (currentCase === playlist.length -1) {
+    if (random) {
+        shufflePlaylist();
+    }
+
+    if (currentCase === playlist.length - 1) {
         currentCase = 0;
     } else {
         currentCase++;
     }
+    setMusicTitle(getMusicName(getCurrentPlaylistPath()));
 }
 
 export function lastCase() {
     if (currentCase === 0) {
-        currentCase = playlist.length -1;
+        currentCase = playlist.length - 1;
     } else {
         currentCase--;
     }
+    setMusicTitle(getMusicName(getCurrentPlaylistPath()));
 }
 
 export function getCurrentPlaylistPath() {
@@ -60,7 +69,11 @@ export function getRepeatMode() {
 }
 
 export function isLastCase() {
-    return (currentCase === playlist.length -1);
+    return (currentCase === playlist.length - 1);
+}
+
+export function setRandomMusic(set) {
+    random = set;
 }
 
 export function changeMode() {
@@ -79,3 +92,18 @@ export function changeMode() {
     }
 }
 
+function getMusicName(filePath) {
+    let name = path.basename(filePath);
+    return name.substr(0, name.lastIndexOf("."));
+}
+
+function shufflePlaylist() {
+    for (let i = playlist.length - 1; i > 0; i--) {
+
+        let j = Math.floor(Math.random() * (i + 1));
+
+        let temp = playlist[i];
+        playlist[i] = playlist[j];
+        playlist[j] = temp;
+    }
+}

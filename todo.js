@@ -4,9 +4,3 @@
 *  - deactivate devTool (openDevTools())
 *  - clear dist folder
 * */
-
-/*TODO
-*  Next time on programming
-*  - Program random playlist selector
-*  - Program next and last song btn
-* */

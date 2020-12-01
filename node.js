@@ -6,6 +6,7 @@ import {startLooper, stopLooper} from "./canvas.js";
 const {ipcRenderer} = require("electron");
 
 export const fs = require("fs");
+export const path = require("path");
 
 export function isFullscreen() {
     return ipcRenderer.sendSync("isFullscreen");

@@ -100,6 +100,16 @@ canvas {
     font-size: 18px;
 }
 
+.controller > .progressControl > #musicTitle {
+    font-size: 12px;
+    transition: 0.3s;
+    cursor: default;
+    width: 206px;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .controller > .windowControl {
     position: absolute;
     right: 15px;
@@ -130,6 +140,10 @@ canvas {
 }
 
 .controller > .loopControl > a > #playlistControl.notUse {
+    filter: grayscale(1) invert(0.46) ;
+}
+
+.controller > .loopControl > a > #randomControl.notUse {
     filter: grayscale(1) invert(0.46) ;
 }
 

@@ -1,10 +1,10 @@
-import {Version} from "./global.js";
+import {getVersion} from "./global.js";
 
 const {ipcRenderer} = require("electron");
 
 ipcRenderer.send("appVersion");
 ipcRenderer.on("appVersion", (event, args) => {
-    Version(args);
+    getVersion(args);
 });
 
 ipcRenderer.on('update_available', () => {

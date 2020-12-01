@@ -52,6 +52,12 @@ export function setMusicRestTime(set) {
     document.getElementById("musicTime").innerHTML = set;
 }
 
+export function setMusicTitle(set) {
+    document.getElementById("musicTitle").innerHTML = set;
+    document.getElementById("musicTitle").title = set;
+    document.title = "Audio Player 2 - " + set;
+}
+
 export function checkPlayIconSrc() {
     let ele  = document.getElementById("musicControlPlay");
     if (isPlaying()) {
