@@ -38,11 +38,29 @@ export function pushPlaylist(array) {
 }
 
 export function isRandom() {
-
+    return random;
 }
 
-export function getRepeateMode() {
+export function isRepeat() {
+    return repeat;
+}
 
+export function isRepeatOne() {
+    return repeatOne;
+}
+
+export function getRepeatMode() {
+    if (noRepeat) {
+        return 0;
+    } else if (repeat) {
+        return 1;
+    } else if (repeatOne) {
+        return 2;
+    }
+}
+
+export function isLastCase() {
+    return (currentCase === playlist.length -1);
 }
 
 export function changeMode() {

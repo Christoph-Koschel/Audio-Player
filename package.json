@@ -1,16 +1,18 @@
 {
-  "name": "audio-player2",
+  "name": "audio-player-2",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "build": "electron-builder build --win --publish never",
-    "deploy": "electron-builder build --win --publish always"
+    "deploy": "electron-builder build --win --publish always",
+    "git-commit": "git commit -m \"Audio Player 2 V1.0.0\"",
+    "git-push": "git push -u origin master"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Sleepy-Reacon/Audio-Player.git"
+    "url": "https://github.com/Christoph-Koschel/Audio-Player.git"
   },
   "keywords": [],
   "author": "Christoph Koschel",
