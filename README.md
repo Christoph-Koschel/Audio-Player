@@ -12,6 +12,7 @@ A HexaStudio Project
 
   - Support for "wav" and "mp3" files.
   - Added the frequency animation.
+  - Added loop and shuffle mode.
 
 ## Roadmap
  
