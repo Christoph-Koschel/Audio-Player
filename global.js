@@ -1,4 +1,5 @@
 let version = "";
+let userData;
 const queryString = window.location.search;
 export const urlParams = new URLSearchParams(queryString);
 
@@ -11,6 +12,14 @@ export function getVersion(set = "") {
         return version;
     } else {
         version = set;
+    }
+}
+
+export function getUserData(set = "") {
+    if (set === "") {
+        return userData;
+    } else {
+        userData = set;
     }
 }
 

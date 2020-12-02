@@ -21,5 +21,10 @@
     "electron": "^11.0.3",
     "electron-builder": "^22.9.1",
     "electron-updater": "^4.3.5"
+  },
+  "build": {
+    "icon": "res/icon/icon.ico",
+    "productName": "Audio Player 2",
+    "copyright": "Copyright © 2020 HexaStudio"
   }
 }
