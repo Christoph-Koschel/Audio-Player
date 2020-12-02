@@ -29,7 +29,7 @@
     "copyright": "Copyright © 2020 HexaStudio",
     "publish": {
       "provider": "github",
-      "token": "db448977478e842b055ead6afc9910cddf750ca4"
+      "token": "bca9444477866f2ad48446cccd22d5421ca52710"
     }
   },
   "dependencies": {
