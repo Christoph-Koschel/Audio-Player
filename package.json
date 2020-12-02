@@ -22,12 +22,6 @@
     "electron-builder": "^22.9.1",
     "electron-updater": "^4.3.5"
   },
-  "build": {
-    "appId": "com.electron.AudioPlayer2",
-    "icon": "res/icon/icon.ico",
-    "productName": "Audio Player 2",
-    "copyright": "Copyright © 2020 HexaStudio"
-  },
   "dependencies": {
     "mime": "^2.4.6"
   }
