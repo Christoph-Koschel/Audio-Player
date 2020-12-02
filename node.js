@@ -3,10 +3,17 @@ import {isPlaying, pause} from "./music.js";
 import {clearPlaylist, nextCase, pushPlaylist} from "./playlist.js";
 import {startLooper, stopLooper} from "./canvas.js";
 
-const {ipcRenderer} = require("electron");
+const {ipcRenderer, remote} = require("electron");
+const userData = ipcRenderer.sendSync("userData");
 
 export const fs = require("fs");
 export const path = require("path");
+
+export function getPath(name) {
+    if (name === "userData") {
+        return userData;
+    }
+}
 
 export function isFullscreen() {
     return ipcRenderer.sendSync("isFullscreen");
@@ -22,7 +29,7 @@ export function openFile() {
     if (isPlaying()) {
         pause();
     }
-    ipcRenderer.on("openFile",(event,args) => {
+    ipcRenderer.on("openFile", (event, args) => {
         clearPlaylist();
         pushPlaylist(JSON.parse(args));
         nextCase();

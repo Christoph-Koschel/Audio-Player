@@ -1,17 +1,21 @@
 import {checkPlayIconSrc, isMusicRestTimeMode, setMusicRestTime, setMusicTime, setProgressbar} from "./ui.js";
 import {isLastCase, isRepeat, isRepeatOne, nextCase} from "./playlist.js";
 import {startLooper, stopLooper} from "./canvas.js";
+import {fs, getPath} from "./node.js";
 
 let audio = new Audio();
 let context;
 let analyser;
 let frequency;
+let defaultFile = "\\default.mp3";
+let volume = 0.5;
 
 export function analyse(path) {
     audio = new Audio();
     context = new (window.AudioContext || window.webkitAudioContext)();
     analyser = context.createAnalyser();
     audio.src = path;
+    audio.volume = volume;
     let source = context.createMediaElementSource(audio);
     source.connect(analyser);
     analyser.connect(context.destination);
@@ -66,6 +70,17 @@ function setEvents() {
 
         checkPlayIconSrc();
     });
+}
+
+export function checkOfflineData() {
+    let path = getPath("userData") + defaultFile;
+    if (!fs.existsSync(path)) {
+        fs.writeFileSync(path,"");
+    }
+}
+
+export function getDefaultMusicPath() {
+    return getPath("userData") + defaultFile;
 }
 
 function getTimeData(time) {

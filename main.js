@@ -2,11 +2,14 @@ const {ipcMain, app, BrowserWindow, dialog} = require("electron");
 const {autoUpdater} = require("electron-updater");
 
 app.on("ready", () => {
+    global["userData"] = app.getPath("userData");
+
     let WIN = new BrowserWindow({
         width: 1020,
         height: 500,
         minWidth: 1020,
         minHeight: 500,
+        icon: "res\\icon\\icon.png",
         webPreferences: {
             nodeIntegration: true
         }
@@ -35,6 +38,10 @@ app.on("ready", () => {
         WIN.setFullScreen(args);
     });
 
+    ipcMain.on("userData",(event) => {
+        event.returnValue = app.getPath("userData");
+    });
+
     ipcMain.on("openFile", (event) => {
         let path = dialog.showOpenDialogSync(WIN, {
             properties: ["openFile", "multiSelections"],
@@ -50,8 +57,12 @@ app.on("ready", () => {
             ]
         });
         if (!path) {
+            let path = app.getPath("userData") + "\\default.mp3";
+            if (!fs.existsSync(path) && !fs.statSync(path).isFile()) {
+                fs.writeFileSync(path,"");
+            }
             path = [
-                "C:\\Users\\Christoph\\Desktop\\Musik\\Stonebank - Who's Got Your Love _Monstercat Release_.mp3" // TODO edit this with offline song;
+                app.getPath("userData") + "\\default.mp3"
             ];
         }
         event.sender.send("openFile", JSON.stringify(path))

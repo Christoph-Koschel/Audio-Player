@@ -7,7 +7,7 @@
     "start": "electron .",
     "build": "electron-builder build --win --publish never",
     "deploy": "electron-builder build --win --publish always",
-    "git-commit": "git commit -m \"Audio Player 2 V1.0.0\"",
+    "git-commit": "git commit -m \"Audio Player 2\"",
     "git-push": "git push -u origin master"
   },
   "repository": {
@@ -23,8 +23,13 @@
     "electron-updater": "^4.3.5"
   },
   "build": {
+    "appId": "com.electron.AudioPlayer2",
     "icon": "res/icon/icon.ico",
     "productName": "Audio Player 2",
-    "copyright": "Copyright © 2020 HexaStudio"
+    "copyright": "Copyright © 2020 HexaStudio",
+    "publish": {
+      "provider": "github",
+      "token": "a11a80a73d31cf0547ac496b702842a67245a96b"
+    }
   }
 }

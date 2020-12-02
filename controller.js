@@ -1,7 +1,7 @@
 import {hasClass, urlParams} from "./global.js";
 import {fadeIn, fadeOut, checkScreenIcon, checkPlayIconSrc, checkRepeatMode} from "./ui.js";
 import {startLooper, stopLooper} from "./canvas.js";
-import {isPlaying, pause, play} from "./music.js";
+import {checkOfflineData, getDefaultMusicPath, isPlaying, pause, play} from "./music.js";
 import {isFullscreen, openFile, setFullscreen} from "./node.js";
 import {changeMode, clearPlaylist, isRandom, lastCase, nextCase, pushPlaylist, setRandomMusic} from "./playlist.js";
 
@@ -105,8 +105,9 @@ window.addEventListener("load", () => {
         checkScreenIcon();
     } else {
         clearPlaylist();
+        checkOfflineData();
         pushPlaylist([
-            "C:\\Users\\Christoph\\Desktop\\Musik\\Stonebank - Who's Got Your Love _Monstercat Release_.mp3" // TODO edit this with offline song;
+            getDefaultMusicPath()
         ]);
         nextCase();
         startLooper(false);
