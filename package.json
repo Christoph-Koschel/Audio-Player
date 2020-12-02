@@ -27,10 +27,6 @@
     "icon": "res/icon/icon.ico",
     "productName": "Audio Player 2",
     "copyright": "Copyright © 2020 HexaStudio",
-    "publish": {
-      "provider": "github",
-      "token": "2b36f249a0860e4f8935d524416963918537a446"
-    }
   },
   "dependencies": {
     "mime": "^2.4.6"

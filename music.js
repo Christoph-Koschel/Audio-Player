@@ -9,7 +9,7 @@ let analyser;
 let frequency;
 let defaultFile = "\\default.mp3";
 let volume = 0.5;
-//wasd
+
 export function analyse(path) {
     audio = new Audio();
     context = new (window.AudioContext || window.webkitAudioContext)();
