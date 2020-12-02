@@ -1,5 +1,6 @@
 const {ipcMain, app, BrowserWindow, dialog} = require("electron");
 const {autoUpdater} = require("electron-updater");
+const fs = require("fs");
 
 app.on("ready", () => {
     global["userData"] = app.getPath("userData");
@@ -9,7 +10,7 @@ app.on("ready", () => {
         height: 500,
         minWidth: 1020,
         minHeight: 500,
-        icon: "res\\icon\\icon.png",
+        icon: "/res/icon/icon.png",
         webPreferences: {
             nodeIntegration: true
         }
@@ -21,9 +22,9 @@ app.on("ready", () => {
 
     WIN.setMenu(null);
 
-    if (process[0] !== undefined && process[0] !== null) {
+    if (process.argv[1] !== undefined && process.argv[1] !== null) {
         WIN.loadFile("index.html", {
-            query: [process[0]]
+            query: [process.argv[1]]
         });
     } else {
         WIN.loadFile("index.html");
