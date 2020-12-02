@@ -31,5 +31,8 @@
       "provider": "github",
       "token": "a11a80a73d31cf0547ac496b702842a67245a96b"
     }
+  },
+  "dependencies": {
+    "mime": "^2.4.6"
   }
 }
