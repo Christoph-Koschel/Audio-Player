@@ -3,9 +3,9 @@ import {isPlaying, pause} from "./music.js";
 import {clearPlaylist, nextCase, pushPlaylist} from "./playlist.js";
 import {startLooper, stopLooper} from "./canvas.js";
 
-const {ipcRenderer, remote} = require("electron");
+const {ipcRenderer} = require("electron");
 const userData = ipcRenderer.sendSync("userData");
-
+export const child_process = require("child_process");
 export const fs = require("fs");
 export const path = require("path");
 

@@ -10,7 +10,7 @@ app.on("ready", () => {
         height: 500,
         minWidth: 1020,
         minHeight: 500,
-        icon: "/res/icon/icon.png",
+        icon: __dirname + "\\res\\icon\\icon.ico",
         webPreferences: {
             nodeIntegration: true
         }
@@ -20,6 +20,7 @@ app.on("ready", () => {
         app.quit();
     });
 
+    WIN.webContents.openDevTools();
     WIN.setMenu(null);
 
     if (process.argv[1] !== undefined && process.argv[1] !== null) {

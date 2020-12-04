@@ -1,6 +1,7 @@
 import {isPlaying} from "./music.js";
 import {isFullscreen} from "./node.js";
 import {getRepeatMode} from "./playlist.js";
+import {getActivePlayMode, getPlayModeList} from "./mode.js";
 
 let musicRestTimeMode = false;
 
@@ -90,6 +91,28 @@ export function checkRepeatMode() {
         case 2:
             ele.src = "./res/icon/repeat-1.svg";
             break;
+    }
+}
+
+export function checkActiveModeBTN() {
+    let list = getPlayModeList();
+
+    for (let i = 0; i < list.length; i++) {
+        document.getElementById(list[i]).classList.remove("active");
+    }
+
+    document.getElementById(getActivePlayMode()).classList.add("active");
+}
+
+export function changeUi(to) {
+    if (to === "youtube") {
+        document.getElementById("openFileControl").style.display = "none";
+        document.getElementsByClassName("loopControl")[0].style.display = "none";
+        document.getElementsByClassName("loadURL")[0].style.display = "unset";
+    } else if (to === "default") {
+        document.getElementById("openFileControl").style.display = "unset";
+        document.getElementsByClassName("loopControl")[0].style.display = "unset";
+        document.getElementsByClassName("loadURL")[0].style.display = "none";
     }
 }
 

@@ -15,16 +15,14 @@ export function getVersion(set = "") {
     }
 }
 
-export function getUserData(set = "") {
-    if (set === "") {
-        return userData;
-    } else {
-        userData = set;
-    }
-}
-
 export function rand(min = 0, max = 50) {
     let num = Math.random() * (max - min) + min;
 
     return Math.floor(num);
+}
+
+export const URI = {
+    getDomain: (url) => {
+        return url.replace('http://','').replace('https://','').split(/[/?#]/)[0];
+    }
 }

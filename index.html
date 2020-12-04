@@ -22,6 +22,10 @@
 
 </canvas>
 <div class="controller">
+    <div class="modeControl">
+        <a id="modeDefault" class="active">Default</a>
+        <a id="modeYT">YouTube</a>
+    </div>
     <div class="mainMusicControl">
         <div>
             <a><img id="musicControlLast" src="./res/icon/angle-double-left.svg"></a>
@@ -41,6 +45,15 @@
     <div class="windowControl">
         <a><img id="openFileControl" src="./res/icon/file-music.svg"></a>
         <a><img id="screenControl" src="./res/icon/expand.svg"></a>
+        <div style="display: none" class="loadURL">
+            <form id="loadURLForm">
+                <input placeholder="https://youtube.com/v=abfsadaw" name="url" type="url" required>
+                <input type="submit" value="Play">
+                <output name="output">
+                    &nbsp;
+                </output>
+            </form>
+        </div>
     </div>
     <div class="loopControl">
         <a><img id="playlistControl" src="./res/icon/repeat.svg" class="notUse"></a>

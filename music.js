@@ -1,5 +1,5 @@
 import {checkPlayIconSrc, isMusicRestTimeMode, setMusicRestTime, setMusicTime, setProgressbar} from "./ui.js";
-import {isLastCase, isRepeat, isRepeatOne, nextCase} from "./playlist.js";
+import {isLastCase, isRepeat, isRepeatOne, nextCase, pushPlaylist} from "./playlist.js";
 import {startLooper, stopLooper} from "./canvas.js";
 import {fs, getPath} from "./node.js";
 
@@ -21,6 +21,19 @@ export function analyse(path) {
     analyser.connect(context.destination);
     frequency = new Uint8Array(analyser.frequencyBinCount);
     setEvents();
+}
+
+export function destroyCurrentAnalyse() {
+    if (isPlaying()) {
+        pause();
+    }
+    audio = new Audio();
+    checkOfflineData();
+    pushPlaylist([
+        getDefaultMusicPath()
+    ]);
+    nextCase();
+    startLooper(false);
 }
 
 export function play() {

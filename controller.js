@@ -1,9 +1,11 @@
-import {hasClass, urlParams} from "./global.js";
-import {fadeIn, fadeOut, checkScreenIcon, checkPlayIconSrc, checkRepeatMode} from "./ui.js";
+import {hasClass, URI, urlParams} from "./global.js";
+import {fadeIn, fadeOut, checkScreenIcon, checkPlayIconSrc, checkRepeatMode, checkActiveModeBTN} from "./ui.js";
 import {startLooper, stopLooper} from "./canvas.js";
 import {checkOfflineData, getDefaultMusicPath, isPlaying, pause, play} from "./music.js";
 import {isFullscreen, openFile, setFullscreen} from "./node.js";
 import {changeMode, clearPlaylist, isRandom, lastCase, nextCase, pushPlaylist, setRandomMusic} from "./playlist.js";
+import {changePlayMode} from "./mode.js";
+import {getYTVideo} from "./youtube.js";
 
 window.addEventListener("load", () => {
     document.getElementsByClassName("toggleShow")[0].addEventListener("click", function () {
@@ -70,6 +72,22 @@ window.addEventListener("load", () => {
     document.getElementById("openFileControl").addEventListener("click", () => {
         openFile();
     });
+
+    document.getElementById("loadURLForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        document.forms["loadURLForm"]["output"].innerHTML = "&nbsp;";
+        let url = document.forms["loadURLForm"]["url"].value;
+        let domain = URI.getDomain(url);
+        if (domain.split(".")[1] === "youtube") {
+            if (isPlaying()) {
+                pause();
+                stopLooper();
+            }
+
+            getYTVideo(url,document.forms["loadURLForm"]["output"]);
+        } else {
+        }
+    });
     //endregion
     /*
      * ===================================
@@ -77,13 +95,24 @@ window.addEventListener("load", () => {
      * ===================================
      */
     //region
+
+    document.getElementById("modeDefault").addEventListener("click", () => {
+        changePlayMode("modeDefault");
+        checkActiveModeBTN();
+    });
+
+    document.getElementById("modeYT").addEventListener("click", () => {
+        changePlayMode("modeYT");
+        checkActiveModeBTN();
+    });
+
     document.getElementById("playlistControl").addEventListener("click", () => {
         changeMode();
         checkRepeatMode();
     });
 
     document.getElementById("randomControl").addEventListener("click", () => {
-        let ele  =document.getElementById("randomControl");
+        let ele = document.getElementById("randomControl");
         ele.classList.remove("notUse");
         if (isRandom()) {
             setRandomMusic(false);

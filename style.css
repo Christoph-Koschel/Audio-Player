@@ -52,7 +52,7 @@ canvas {
     z-index: 0;
 }
 
-.controller > .mainMusicControl {
+.mainMusicControl {
     position: absolute;
     left: 50%;
     top: 10%;
@@ -63,11 +63,11 @@ canvas {
     text-align: center;
 }
 
-.controller > .mainMusicControl > div > a > img {
+.mainMusicControl > div > a > img {
     width: 35px;
 }
 
-.controller > .progressControl {
+.progressControl {
     position: absolute;
     bottom: 15px;
     left: 15px;
@@ -75,32 +75,32 @@ canvas {
     padding: 15px;
 }
 
-.controller > .progressControl > .bar {
+.progressControl > .bar {
     width: 200px;
     padding: 3px;
     background: #969696;
     border-radius: 5px;
 }
 
-.controller > .progressControl > .bar > #fill {
+.progressControl > .bar > #fill {
     width: 100%;
     height: 5px;
     border-radius: 5px;
     background: linear-gradient(to left, #00d9bc, #00c3ac, #00d9bc);
 }
 
-.controller > .progressControl > #musicTime {
+.progressControl > #musicTime {
     font-size: 12px;
     transition: 0.3s;
     cursor: default;
     width: 206px;
 }
 
-.controller > .progressControl > #musicTime:hover {
+.progressControl > #musicTime:hover {
     font-size: 18px;
 }
 
-.controller > .progressControl > #musicTitle {
+.progressControl > #musicTitle {
     font-size: 12px;
     transition: 0.3s;
     cursor: default;
@@ -110,24 +110,42 @@ canvas {
     text-overflow: ellipsis;
 }
 
-.controller > .windowControl {
+.windowControl {
     position: absolute;
     right: 15px;
     bottom: 15px;
-    width: 250px;
+    width: 290px;
     padding: 15px;
     text-align: right;
 }
 
-.controller > .windowControl > a {
+.windowControl > a {
     margin: 0 2px;
 }
 
-.controller > .windowControl > a > img {
+.windowControl > a > img {
     width: 30px;
 }
 
-.controller > .loopControl {
+.windowControl >  .loadURL >  #loadURLForm > input[type="url"] {
+    width: 230px;
+    border-width: 1px;
+    border-radius: 5px;
+    outline: none;
+}
+
+.windowControl >  .loadURL >  #loadURLForm > input[type="url"]:focus {
+
+}
+
+.windowControl >  .loadURL >  #loadURLForm > input[type="submit"] {
+    padding: 1px 9px;
+    background-color: #13dbe4;
+    border-width: 1px;
+    border-radius: 4px;
+}
+
+.loopControl {
     position: absolute;
     bottom: 15px;
     left: 58%;
@@ -135,15 +153,15 @@ canvas {
     padding: 15px;
 }
 
-.controller > .loopControl > a > img {
+.loopControl > a > img {
     width: 30px;
 }
 
-.controller > .loopControl > a > #playlistControl.notUse {
+.loopControl > a > #playlistControl.notUse {
     filter: grayscale(1) invert(0.46) ;
 }
 
-.controller > .loopControl > a > #randomControl.notUse {
+.loopControl > a > #randomControl.notUse {
     filter: grayscale(1) invert(0.46) ;
 }
 
@@ -172,4 +190,32 @@ canvas {
 .toggleShow > img.light {
     width: 30px;
     height: auto;
+}
+
+.modeControl {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    height: 150px;
+}
+
+.modeControl > a {
+    padding: 5px 10px;
+    background-color: #454545;
+    color: white;
+    display: block;
+    float: left;
+    cursor: default;
+}
+
+.modeControl > a:last-of-type {
+    border-bottom-right-radius: 15px;
+}
+
+.modeControl > a:hover {
+    color: #00ffe1;
+}
+
+.modeControl > a.active {
+    color: #00c3ac;
 }
