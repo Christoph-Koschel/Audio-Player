@@ -1,8 +1,7 @@
-import {destroyCurrentAnalyse, isPlaying, pause} from "./music.js";
-import {stopLooper} from "./canvas.js";
+import {destroyCurrentAnalyse} from "./music.js";
 import {clearYoutubePlayCache} from "./youtube.js";
 import {clearPlaylist} from "./playlist.js";
-import {changeUi} from "./ui.js";
+import {changeUi, checkPlayIconSrc} from "./ui.js";
 
 let activeMode = "";
 let modeList = [
@@ -15,27 +14,26 @@ export function changePlayMode(to) {
         return;
     }
 
-    if (isPlaying()) {
-        pause();
-    }
+    destroyCurrentAnalyse();
 
-    clearYoutubePlayCache();
+    setTimeout(() => {
+        clearYoutubePlayCache();
+    },500);
 
     switch (to) {
         case "modeYT":
-            destroyCurrentAnalyse();
             changeUi("youtube");
             clearPlaylist();
-
             activeMode = to;
             break;
         case "modeDefault":
-            destroyCurrentAnalyse();
             changeUi("default");
             clearPlaylist();
             activeMode = to;
             break;
     }
+
+    checkPlayIconSrc();
 }
 
 export function getActivePlayMode() {
