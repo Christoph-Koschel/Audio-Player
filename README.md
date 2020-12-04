@@ -17,6 +17,8 @@ A HexaStudio Project
 ## Roadmap
  
  - [ ] Add a miniplayer.
+ - [ ] Add shortcuts.
+ - [ ] Add settings.
  - [x] Add a YouTube video support
 
 ## Download
