@@ -8,11 +8,8 @@ Audio Player 2 is an Audio Player Program for Windows\
 -----------------
 A HexaStudio Project 
 
-## New Features!
-
-  - Support for "wav" and "mp3" files.
-  - Added the frequency animation.
-  - Added loop and shuffle mode.
+## New Features from the last Release!
+  - Added YouTube Support
 
 ## Roadmap
  
