@@ -26,6 +26,7 @@ canvas {
     border-radius: 5px;
     background-color: #535353;
     box-shadow: 2px 2px 5px 5px rgba(0, 0, 0, 0.2);
+    color: white;
     z-index: 1;
 }
 
@@ -36,6 +37,7 @@ canvas {
 #close-button, #restart-button {
     cursor: default;
     transition: 0.3s;
+    margin: 0 5px;
 }
 
 #close-button:hover, #restart-button:hover {
