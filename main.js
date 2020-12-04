@@ -19,7 +19,6 @@ app.on("ready", () => {
     WIN.on("close", () => {
         app.quit();
     });
-    WIN.webContents.openDevTools();
     WIN.setMenu(null);
 
     if (process.argv[1] !== undefined && process.argv[1] !== null) {
