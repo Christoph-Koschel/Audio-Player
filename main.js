@@ -20,6 +20,7 @@ app.on("ready", () => {
         app.quit();
     });
     WIN.setMenu(null);
+    WIN.webContents.openDevTools();
 
     if (process.argv[1] !== undefined && process.argv[1] !== null) {
         WIN.loadFile("index.html", {
@@ -83,6 +84,10 @@ app.on("ready", () => {
     });
     autoUpdater.on('update-downloaded', () => {
         WIN.webContents.send('update_downloaded');
+    });
+
+    autoUpdater.on("installed",() => {
+        WIN.webContents.send("update_installed");
     });
 
     ipcMain.on("appVersion", (event) => {

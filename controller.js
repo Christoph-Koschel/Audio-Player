@@ -143,4 +143,8 @@ window.addEventListener("load", () => {
         checkPlayIconSrc();
         checkScreenIcon();
     }
+
+    document.getElementById("disclaimerFrame").contentWindow.document.getElementById("sub").addEventListener("click",() => {
+        document.getElementById("disclaimer").style.display = "none";
+    });
 });
