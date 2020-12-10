@@ -13,7 +13,6 @@ let center = {
 
 export function startLooper(autoplay) {
     let path = getCurrentPlaylistPath();
-    console.log(path);
     analyse(path);
     if (autoplay) {
         play();

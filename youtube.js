@@ -4,15 +4,15 @@ import {startLooper} from "./canvas.js";
 import {checkPlayIconSrc} from "./ui.js";
 import {checkOfflineData, destroyCurrentAnalyse, getDefaultMusicPath, isPlaying, pause} from "./music.js";
 
-let lastURL = "";
+let filename = Date.now();
 
 export function clearYoutubePlayCache(destroyAnalyse = true) {
     if (destroyAnalyse) {
         destroyCurrentAnalyse();
     }
-    if (fs.existsSync(getPath("userData") + "\\00.mp3") && fs.statSync(getPath("userData") + "\\00.mp3")) {
+    if (fs.existsSync(getPath("userData") + "\\"+filename+".mp3") && fs.statSync(getPath("userData") + "\\"+filename+".mp3")) {
         try {
-            fs.unlinkSync(getPath("userData") + "\\00.mp3");
+            fs.unlinkSync(getPath("userData") + "\\"+filename+".mp3");
         } catch (err) {
             console.log(err);
         }
@@ -20,6 +20,8 @@ export function clearYoutubePlayCache(destroyAnalyse = true) {
 }
 
 export function getYTVideo(uri, status = undefined) {
+    document.forms["loadURLForm"]["url"].value = "";
+
     if (isPlaying()) {
         pause();
     }
@@ -33,19 +35,31 @@ export function getYTVideo(uri, status = undefined) {
     checkPlayIconSrc();
     clearYoutubePlayCache();
 
-    lastURL = uri;
+    if (status !== undefined) {
+        status.innerHTML = "Get youtube video...";
+    }
     setTimeout(() => {
         const ytdl = require("ytdl-core");
-        ytdl(uri, {filter: "audioonly"}).pipe(fs.createWriteStream(getPath("userData") + "\\00.mp3").on("close",() => {
+        filename = Date.now();
+        ytdl(uri, {filter: "audioonly"}).pipe(fs.createWriteStream(getPath("userData") +"\\"+filename+".mp3").on("close",() => {
             setTimeout(() => {
+                if (status !== undefined) {
+                    status.innerHTML = "Play";
+                }
                 clearPlaylist();
                 checkOfflineData();
                 pushPlaylist([
-                    getPath("userData") + "\\00.mp3"
+                    getPath("userData") + "\\"+filename+".mp3"
                 ]);
                 nextCase();
                 startLooper(true);
                 checkPlayIconSrc();
+
+                setTimeout(() => {
+                    if (status !== undefined) {
+                        status.innerHTML = "&nbsp;";
+                    }
+                },5000);
             },200);
         }));
     },200);

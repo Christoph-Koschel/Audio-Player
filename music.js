@@ -10,17 +10,25 @@ let analyser;
 let frequency;
 let defaultFile = "\\default.mp3";
 let volume = 0.5;
+let source;
+let connected = false;
 
-export function analyse(path) {
-    void audio;
-    audio = new Audio();
+function connect() {
     context = new (window.AudioContext || window.webkitAudioContext)();
     analyser = context.createAnalyser();
-    audio.src = path;
-    audio.volume = volume;
-    let source = context.createMediaElementSource(audio);
+    source = context.createMediaElementSource(audio);
     source.connect(analyser);
     analyser.connect(context.destination);
+    connected = true;
+}
+
+export function analyse(path) {
+    if (!connected) {
+        connect();
+    }
+    audio.src = path;
+    audio.load();
+    audio.volume = volume;
     frequency = new Uint8Array(analyser.frequencyBinCount);
     setEvents();
 }
