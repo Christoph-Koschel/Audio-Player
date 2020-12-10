@@ -2,6 +2,7 @@ import {checkPlayIconSrc, isMusicRestTimeMode, setMusicRestTime, setMusicTime, s
 import {isLastCase, isRepeat, isRepeatOne, nextCase, pushPlaylist} from "./playlist.js";
 import {startLooper, stopLooper} from "./canvas.js";
 import {fs, getPath} from "./node.js";
+import {clearYoutubePlayCache} from "./youtube.js";
 
 let audio = new Audio();
 let context;
@@ -11,6 +12,7 @@ let defaultFile = "\\default.mp3";
 let volume = 0.5;
 
 export function analyse(path) {
+    void audio;
     audio = new Audio();
     context = new (window.AudioContext || window.webkitAudioContext)();
     analyser = context.createAnalyser();
@@ -27,7 +29,8 @@ export function destroyCurrentAnalyse() {
     if (isPlaying()) {
         pause();
     }
-    audio = new Audio();
+    audio.src = getDefaultMusicPath();
+    audio.load();
     checkOfflineData();
     pushPlaylist([
         getDefaultMusicPath()
@@ -82,6 +85,7 @@ function setEvents() {
         }
 
         checkPlayIconSrc();
+        clearYoutubePlayCache(false);
     });
 }
 

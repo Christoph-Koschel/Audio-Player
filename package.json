@@ -1,6 +1,6 @@
 {
   "name": "audio-player-2",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -23,7 +23,9 @@
     "electron-builder": "^22.9.1"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "electron-updater": "^4.3.5",
-    "mime": "^2.4.6"
+    "mime": "^2.4.6",
+    "ytdl-core": "^4.1.4"
   }
 }

@@ -1,42 +1,50 @@
-import {child_process, fs, getPath} from "./node.js";
+import {fs, getPath} from "./node.js";
 import {clearPlaylist, nextCase, pushPlaylist} from "./playlist.js";
 import {startLooper} from "./canvas.js";
 import {checkPlayIconSrc} from "./ui.js";
-import {checkOfflineData} from "./music.js";
+import {checkOfflineData, destroyCurrentAnalyse, getDefaultMusicPath, isPlaying, pause} from "./music.js";
 
-export function clearYoutubePlayCache() {
+let lastURL = "";
+
+export function clearYoutubePlayCache(destroyAnalyse = true) {
+    if (destroyAnalyse) {
+        destroyCurrentAnalyse();
+    }
     if (fs.existsSync(getPath("userData") + "\\00.mp3") && fs.statSync(getPath("userData") + "\\00.mp3")) {
-        fs.unlinkSync(getPath("userData") + "\\00.mp3");
+        try {
+            fs.unlinkSync(getPath("userData") + "\\00.mp3");
+        } catch (err) {
+            console.log(err);
+        }
     }
 }
 
 export function getYTVideo(uri, status = undefined) {
-    clearYoutubePlayCache();
-    if (status !== undefined) {
-        status.innerHTML = "Get YouTube video...";
+    if (isPlaying()) {
+        pause();
     }
-    const params = (new URL(uri)).searchParams;
+    clearPlaylist();
+    checkOfflineData();
+    pushPlaylist([
+        getDefaultMusicPath()
+    ]);
+    nextCase();
+    startLooper(false);
+    checkPlayIconSrc();
+    clearYoutubePlayCache();
+
+    lastURL = uri;
     setTimeout(() => {
-        let push = "";
-        try {
-            child_process.execSync("\"" + __dirname + "\\Youtube API.exe\" https://www.youtube.com/watch?v=" + params.get("v") + " " + getPath("userData"));
-            push = "\\00.mp3";
-        } catch (err) {
-            console.log(err);
+        const ytdl = require("ytdl-core");
+        ytdl(uri, {filter: "audioonly"}).pipe(fs.createWriteStream(getPath("userData") + "\\00.mp3").on("close",() => {
+            clearPlaylist();
             checkOfflineData();
-            push = "default.mp3";
-        }
-
-        if (status !== undefined) {
-            status.innerHTML = "Play video...";
-        }
-        clearPlaylist();
-        pushPlaylist([
-            getPath("userData") + push
-        ]);
-        nextCase();
-        startLooper(true);
-        checkPlayIconSrc();
-    }, 200)
-
+            pushPlaylist([
+                getPath("userData") + "\\00.mp3"
+            ]);
+            nextCase();
+            startLooper(true);
+            checkPlayIconSrc();
+        }));
+    },200);
 }
