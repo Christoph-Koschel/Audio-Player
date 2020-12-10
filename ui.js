@@ -2,8 +2,10 @@ import {isPlaying} from "./music.js";
 import {isFullscreen} from "./node.js";
 import {getRepeatMode} from "./playlist.js";
 import {getActivePlayMode, getPlayModeList} from "./mode.js";
+import {rand} from "./global.js";
 
 let musicRestTimeMode = false;
+let hiddenTitle = false;
 
 export function fadeIn() {
     const ele = document.getElementsByClassName("controller")[0];
@@ -54,9 +56,25 @@ export function setMusicRestTime(set) {
 }
 
 export function setMusicTitle(set) {
-    document.getElementById("musicTitle").innerHTML = set;
-    document.getElementById("musicTitle").title = set;
-    document.title = "Audio Player 2 - " + set;
+    if (hiddenTitle) {
+        let title = rand(0,9).toString();
+        title += rand(0.9).toString();
+        title += rand(0.9).toString();
+        title += rand(0.9).toString();
+        title += rand(0.9).toString();
+        document.getElementById("musicTitle").innerHTML = title;
+        document.getElementById("musicTitle").title = title;
+        document.title = "Audio Player 2 - " + title;
+    } else {
+        document.getElementById("musicTitle").innerHTML = set;
+        document.getElementById("musicTitle").title = set;
+        document.title = "Audio Player 2 - " + set;
+    }
+
+}
+
+export function setHiddenTitle(bool) {
+    hiddenTitle = bool;
 }
 
 export function checkPlayIconSrc() {
