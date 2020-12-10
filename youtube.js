@@ -37,14 +37,16 @@ export function getYTVideo(uri, status = undefined) {
     setTimeout(() => {
         const ytdl = require("ytdl-core");
         ytdl(uri, {filter: "audioonly"}).pipe(fs.createWriteStream(getPath("userData") + "\\00.mp3").on("close",() => {
-            clearPlaylist();
-            checkOfflineData();
-            pushPlaylist([
-                getPath("userData") + "\\00.mp3"
-            ]);
-            nextCase();
-            startLooper(true);
-            checkPlayIconSrc();
+            setTimeout(() => {
+                clearPlaylist();
+                checkOfflineData();
+                pushPlaylist([
+                    getPath("userData") + "\\00.mp3"
+                ]);
+                nextCase();
+                startLooper(true);
+                checkPlayIconSrc();
+            },200);
         }));
     },200);
 }
