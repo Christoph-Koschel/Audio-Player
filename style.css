@@ -38,6 +38,8 @@ canvas {
     left: 5%;
     height: 90%;
     width: 90%;
+    background-color: white;
+    color: black!important;
 }
 
 #notification {

@@ -1,9 +1,20 @@
 const {ipcMain, app, BrowserWindow, dialog} = require("electron");
 const {autoUpdater} = require("electron-updater");
 const fs = require("fs");
+let ytList = [];
+
 
 app.on("ready", () => {
     console.log(app.getPath("userData"));
+
+    app.on("before-quit", () => {
+        for (let i = 0; i < ytList.length; i++) {
+            let path = app.getPath("userData") + "\\" + ytList[i] + ".mp3";
+            if (fs.existsSync(path) && fs.statSync(path).isFile()) {
+                fs.unlinkSync(path);
+            }
+        }
+    });
 
     let WIN = new BrowserWindow({
         width: 1020,
@@ -40,6 +51,10 @@ app.on("ready", () => {
 
     ipcMain.on("userData", (event) => {
         event.returnValue = app.getPath("userData");
+    });
+
+    ipcMain.on("updateYtDataList",(event, args) => {
+        ytList = args;
     });
 
     ipcMain.on("openFile", (event) => {
@@ -84,13 +99,8 @@ app.on("ready", () => {
     });
     autoUpdater.on('update-downloaded', () => {
         WIN.webContents.send('update_downloaded');
-        fs.writeFileSync(app.getPath("userData") + "\\updated", autoUpdater.currentVersion);
+        fs.writeFileSync(app.getPath("userData") + "\\updated", "");
     });
-
-    if (fs.existsSync(app.getPath("userData") + "\\updated")) {
-        WIN.webContents.send("update_installed");
-        fs.unlinkSync(app.getPath("userData") + "\\updated");
-    }
 
     ipcMain.on("appVersion", (event) => {
         event.sender.send("appVersion", app.getVersion());

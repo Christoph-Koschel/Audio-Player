@@ -2,7 +2,7 @@ import {hasClass, URI, urlParams} from "./global.js";
 import {fadeIn, fadeOut, checkScreenIcon, checkPlayIconSrc, checkRepeatMode, checkActiveModeBTN} from "./ui.js";
 import {startLooper, stopLooper} from "./canvas.js";
 import {checkOfflineData, getDefaultMusicPath, isPlaying, pause, play} from "./music.js";
-import {isFullscreen, openFile, setFullscreen} from "./node.js";
+import {fs, getPath, isFullscreen, openFile, setFullscreen} from "./node.js";
 import {changeMode, clearPlaylist, isRandom, lastCase, nextCase, pushPlaylist, setRandomMusic} from "./playlist.js";
 import {changePlayMode} from "./mode.js";
 import {getYTVideo} from "./youtube.js";
@@ -146,5 +146,6 @@ window.addEventListener("load", () => {
 
     document.getElementById("disclaimerFrame").contentWindow.document.getElementById("sub").addEventListener("click",() => {
         document.getElementById("disclaimer").style.display = "none";
+        fs.unlinkSync(getPath("userData") + "\\updated");
     });
 });

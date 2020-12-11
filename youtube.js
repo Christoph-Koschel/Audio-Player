@@ -1,4 +1,4 @@
-import {fs, getPath} from "./node.js";
+import {fs, getPath, updateYTList} from "./node.js";
 import {clearPlaylist, nextCase, pushPlaylist} from "./playlist.js";
 import {startLooper} from "./canvas.js";
 import {checkPlayIconSrc} from "./ui.js";
@@ -48,6 +48,7 @@ export function getYTVideo(uri, status = undefined) {
         const ytdl = require("ytdl-core");
         filename = Date.now();
         filenameCache.push(filename);
+        updateYTList(filenameCache);
         ytdl(uri, {filter: "audioonly"}).pipe(fs.createWriteStream(getPath("userData") +"\\"+filename+".mp3").on("close",() => {
             setTimeout(() => {
                 if (status !== undefined) {

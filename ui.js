@@ -58,10 +58,10 @@ export function setMusicRestTime(set) {
 export function setMusicTitle(set) {
     if (hiddenTitle) {
         let title = rand(0,9).toString();
-        title += rand(0.9).toString();
-        title += rand(0.9).toString();
-        title += rand(0.9).toString();
-        title += rand(0.9).toString();
+        title += rand(0,9).toString();
+        title += rand(0,9).toString();
+        title += rand(0,9).toString();
+        title += rand(0,9).toString();
         document.getElementById("musicTitle").innerHTML = title;
         document.getElementById("musicTitle").title = title;
         document.title = "Audio Player 2 - " + title;

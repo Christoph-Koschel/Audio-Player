@@ -25,6 +25,10 @@ export function setFullscreen(boolean) {
     });
 }
 
+export function updateYTList(list) {
+    ipcRenderer.send("updateYtDataList", list);
+}
+
 export function openFile() {
     if (isPlaying()) {
         pause();
@@ -38,5 +42,4 @@ export function openFile() {
         checkPlayIconSrc();
     });
     ipcRenderer.send("openFile");
-
 }
