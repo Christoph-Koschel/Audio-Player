@@ -31,7 +31,6 @@ app.on("ready", () => {
         app.quit();
     });
     WIN.setMenu(null);
-    WIN.webContents.openDevTools();
 
     if (process.argv[1] !== undefined && process.argv[1] !== null) {
         WIN.loadFile("index.html", {
