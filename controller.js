@@ -7,18 +7,76 @@ import {changeMode, clearPlaylist, isRandom, lastCase, nextCase, pushPlaylist, s
 import {changePlayMode} from "./mode.js";
 import {getYTVideo} from "./youtube.js";
 
+function toggleControllerView() {
+    let ele = document.getElementsByClassName("toggleShow")[0];
+    if (hasClass(ele, "opened")) {
+        fadeOut();
+        ele.classList.remove("opened");
+        document.getElementById("toggleShowIcon").src = "./res/icon/angle-up.svg";
+    } else {
+        fadeIn();
+        ele.classList.add("opened");
+        document.getElementById("toggleShowIcon").src = "./res/icon/angle-down.svg";
+    }
+}
+
+function controlPlay() {
+    if (isPlaying()) {
+        pause();
+    } else {
+        play();
+    }
+    checkPlayIconSrc();
+}
+
+function controlNext() {
+    if (isPlaying()) {
+        pause();
+    }
+    stopLooper();
+    nextCase();
+    startLooper(true);
+    checkPlayIconSrc();
+}
+
+function controlLast() {
+    if (isPlaying()) {
+        pause();
+    }
+    stopLooper();
+    lastCase();
+    startLooper(true);
+    checkPlayIconSrc();
+}
+
+function toggleFullscreen() {
+    if (isFullscreen()) {
+        setFullscreen(false);
+    } else {
+        setFullscreen(true);
+    }
+}
+
 window.addEventListener("load", () => {
-    document.getElementsByClassName("toggleShow")[0].addEventListener("click", function () {
-        if (hasClass(this, "opened")) {
-            fadeOut();
-            this.classList.remove("opened");
-            document.getElementById("toggleShowIcon").src = "./res/icon/angle-up.svg";
-        } else {
-            fadeIn();
-            this.classList.add("opened");
-            document.getElementById("toggleShowIcon").src = "./res/icon/angle-down.svg";
+    window.addEventListener("keyup", (event) => {
+        console.log(event.keyCode);
+        if (event.shiftKey && event.keyCode === 67) { // 67 === "c"
+            toggleControllerView();
+        } else if (event.keyCode === 32) { // 32 === "(space)"
+            controlPlay();
+        } else if (event.shiftKey && event.keyCode === 88) { // 88 === "x"
+            controlNext();
+        } else if (event.shiftKey && event.keyCode === 89) { // 89 === "y"
+            controlLast();
+        } else if (event.shiftKey && event.keyCode === 70) { // 70 === "f"
+            toggleFullscreen();
         }
     });
+
+    document.getElementsByClassName("toggleShow")[0].addEventListener("click", function () {
+        toggleControllerView();
+    });
+
     /*
      * ===================================
      * == Music Control
@@ -27,32 +85,15 @@ window.addEventListener("load", () => {
     //region
 
     document.getElementById("musicControlPlay").addEventListener("click", () => {
-        if (isPlaying()) {
-            pause();
-        } else {
-            play();
-        }
-        checkPlayIconSrc();
+        controlPlay();
     });
 
     document.getElementById("musicControlNext").addEventListener("click", () => {
-        if (isPlaying()) {
-            pause();
-        }
-        stopLooper();
-        nextCase();
-        startLooper(true);
-        checkPlayIconSrc();
+        controlNext();
     });
 
     document.getElementById("musicControlLast").addEventListener("click", () => {
-        if (isPlaying()) {
-            pause();
-        }
-        stopLooper();
-        lastCase();
-        startLooper(true);
-        checkPlayIconSrc();
+        controlLast();
     });
     //endregion
     /*
@@ -62,11 +103,7 @@ window.addEventListener("load", () => {
      */
     //region
     document.getElementById("screenControl").addEventListener("click", () => {
-        if (isFullscreen()) {
-            setFullscreen(false);
-        } else {
-            setFullscreen(true);
-        }
+        toggleFullscreen();
     });
 
     document.getElementById("openFileControl").addEventListener("click", () => {
@@ -84,7 +121,7 @@ window.addEventListener("load", () => {
                 stopLooper();
             }
 
-            getYTVideo(url,document.forms["loadURLForm"]["output"]);
+            getYTVideo(url, document.forms["loadURLForm"]["output"]);
         } else {
         }
     });
@@ -144,7 +181,7 @@ window.addEventListener("load", () => {
         checkScreenIcon();
     }
 
-    document.getElementById("disclaimerFrame").contentWindow.document.getElementById("sub").addEventListener("click",() => {
+    document.getElementById("disclaimerFrame").contentWindow.document.getElementById("sub").addEventListener("click", () => {
         document.getElementById("disclaimer").style.display = "none";
         fs.unlinkSync(getPath("userData") + "\\updated");
     });

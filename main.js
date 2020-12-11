@@ -31,6 +31,7 @@ app.on("ready", () => {
         app.quit();
     });
     WIN.setMenu(null);
+    WIN.webContents.openDevTools();
 
     if (process.argv[1] !== undefined && process.argv[1] !== null) {
         WIN.loadFile("index.html", {
@@ -89,7 +90,7 @@ app.on("ready", () => {
     */
     //region
 
-    WIN.once("ready-to-show", () => {
+    ipcMain.on("check_update",() => {
         autoUpdater.checkForUpdatesAndNotify();
     });
 
