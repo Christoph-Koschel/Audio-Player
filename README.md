@@ -11,7 +11,7 @@ A HexaStudio Project
 
 ## New Features from the Release 1.2.0!
   - Add Shortcuts
-  - More music control
+  - Add more music control
 
 ## Roadmap
  
