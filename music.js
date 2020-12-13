@@ -68,6 +68,14 @@ export function getFrequency() {
     return frequency;
 }
 
+export function timeForward(sec) {
+    audio.currentTime = audio.currentTime + sec;
+}
+
+export function timeBackward(sec) {
+    audio.currentTime = audio.currentTime - sec;
+}
+
 function setEvents() {
     audio.addEventListener("timeupdate", () => {
         if (isMusicRestTimeMode()) {

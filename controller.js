@@ -1,7 +1,7 @@
 import {hasClass, URI, urlParams} from "./global.js";
 import {fadeIn, fadeOut, checkScreenIcon, checkPlayIconSrc, checkRepeatMode, checkActiveModeBTN} from "./ui.js";
 import {startLooper, stopLooper} from "./canvas.js";
-import {checkOfflineData, getDefaultMusicPath, isPlaying, pause, play} from "./music.js";
+import {checkOfflineData, getDefaultMusicPath, isPlaying, pause, play, timeBackward, timeForward} from "./music.js";
 import {fs, getPath, isFullscreen, openFile, setFullscreen} from "./node.js";
 import {changeMode, clearPlaylist, isRandom, lastCase, nextCase, pushPlaylist, setRandomMusic} from "./playlist.js";
 import {changePlayMode} from "./mode.js";
@@ -95,6 +95,15 @@ window.addEventListener("load", () => {
     document.getElementById("musicControlLast").addEventListener("click", () => {
         controlLast();
     });
+
+    document.getElementById("musicBackward").addEventListener("click",() => {
+        timeBackward(5);
+    });
+
+    document.getElementById("musicForward").addEventListener("click",() => {
+        timeForward(5);
+    });
+
     //endregion
     /*
      * ===================================

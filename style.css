@@ -94,6 +94,10 @@ canvas {
     width: 35px;
 }
 
+.mainMusicControl > div > a > img.min {
+    width: 25px;
+}
+
 .progressControl {
     position: absolute;
     bottom: 15px;
