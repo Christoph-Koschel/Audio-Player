@@ -3,19 +3,20 @@
 ## Description
 
 Audio Player 2 is an Audio Player Program for Windows\
-**Latest Version:** 1.1.2\
+**Latest Version:** 1.2.0\
 **Programed by** Christoph Koschel
 
 -----------------
 A HexaStudio Project 
 
-## New Features from the last Release!
-  - Added YouTube Support
+## New Features from the Release 1.2.0!
+  - Add Shortcuts
+  - More music control
 
 ## Roadmap
  
  - [ ] Add a miniplayer.
- - [ ] Add shortcuts.
+ - [x] Add shortcuts.
  - [ ] Add settings.
  - [x] Add a YouTube video support
 
