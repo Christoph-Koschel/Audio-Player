@@ -1,8 +1,8 @@
 import {isPlaying} from "./music.js";
-import {isFullscreen} from "./node.js";
-import {getRepeatMode} from "./playlist.js";
+import {isFullscreen, path} from "./node.js";
+import {getPlaylistArray, getRepeatMode, playlistItemHigher, playlistItemLower} from "./playlist.js";
 import {getActivePlayMode, getPlayModeList} from "./mode.js";
-import {rand} from "./global.js";
+import {hasClass, rand} from "./global.js";
 
 let musicRestTimeMode = false;
 let hiddenTitle = false;
@@ -57,11 +57,11 @@ export function setMusicRestTime(set) {
 
 export function setMusicTitle(set) {
     if (hiddenTitle) {
-        let title = rand(0,9).toString();
-        title += rand(0,9).toString();
-        title += rand(0,9).toString();
-        title += rand(0,9).toString();
-        title += rand(0,9).toString();
+        let title = rand(0, 9).toString();
+        title += rand(0, 9).toString();
+        title += rand(0, 9).toString();
+        title += rand(0, 9).toString();
+        title += rand(0, 9).toString();
         document.getElementById("musicTitle").innerHTML = title;
         document.getElementById("musicTitle").title = title;
         document.title = "Audio Player 2 - " + title;
@@ -78,7 +78,7 @@ export function setHiddenTitle(bool) {
 }
 
 export function checkPlayIconSrc() {
-    let ele  = document.getElementById("musicControlPlay");
+    let ele = document.getElementById("musicControlPlay");
     if (isPlaying()) {
         ele.src = "./res/icon/pause.svg";
     } else {
@@ -139,6 +139,61 @@ export function togglePlaylistView(show) {
         document.getElementsByClassName("playlistView")[0].style.display = "unset";
     } else {
         document.getElementsByClassName("playlistView")[0].style.display = "none";
+    }
+}
+
+export function loadPlaylistViewEntries() {
+    let list = getPlaylistArray();
+
+    document.getElementById("playlistViewList").innerHTML = "";
+
+    for (let i = 0; i < list.length; i++) {
+        let listItem = list[i];
+
+        let box = document.createElement("div");
+
+        let div = document.createElement("div");
+        div.classList.add("playlistItemTitle");
+        div.title = path.basename(listItem);
+        div.innerHTML = path.basename(listItem);
+
+        let control = document.createElement("div");
+
+        let img1 = document.createElement("img");
+        img1.src = "./res/icon/arrow-circle-left.svg";
+        if (i === 0) {
+            img1.classList.add("deactivate");
+        }
+        img1.addEventListener("click", function () {
+            this.itemID = i;
+
+            if (!hasClass(this,"deactivate")) {
+                playlistItemLower(this.itemID);
+                loadPlaylistViewEntries();
+            }
+        });
+
+        let img2 = document.createElement("img");
+        img2.src = "./res/icon/arrow-circle-right.svg";
+        if (i === list.length - 1) {
+            img2.classList.add("deactivate");
+        }
+        img2.addEventListener("click", function () {
+            this.itemID = i;
+
+            if (!hasClass(this,"deactivate")) {
+                playlistItemHigher(this.itemID);
+                loadPlaylistViewEntries();
+            }
+        });
+
+        control.appendChild(img1);
+        control.appendChild(img2);
+
+        box.appendChild(div);
+        box.appendChild(control);
+
+        document.getElementById("playlistViewList").appendChild(box);
     }
 }
 

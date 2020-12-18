@@ -6,7 +6,7 @@ import {
     checkPlayIconSrc,
     checkRepeatMode,
     checkActiveModeBTN,
-    togglePlaylistView
+    togglePlaylistView, loadPlaylistViewEntries
 } from "./ui.js";
 import {startLooper, stopLooper} from "./canvas.js";
 import {checkOfflineData, getDefaultMusicPath, isPlaying, pause, play, timeBackward, timeForward} from "./music.js";
@@ -176,9 +176,15 @@ window.addEventListener("load", () => {
         }
     });
 
-    document.getElementById("editPlaylist").addEventListener("click",() => {
+    document.getElementById("editPlaylist").addEventListener("click", () => {
+        loadPlaylistViewEntries();
         togglePlaylistView(true);
     });
+
+    document.getElementById("closePlaylistView").addEventListener("click",() => {
+        togglePlaylistView(false);
+    });
+
     //endregion
     if (urlParams.has("0")) {
         let path = urlParams.get("0");

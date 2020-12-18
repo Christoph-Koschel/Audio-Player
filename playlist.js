@@ -68,6 +68,10 @@ export function getRepeatMode() {
     }
 }
 
+export function getPlaylistArray() {
+    return playlist;
+}
+
 export function isLastCase() {
     return (currentCase === playlist.length - 1);
 }
@@ -90,6 +94,22 @@ export function changeMode() {
         repeatOne = false;
         repeat = false;
     }
+}
+
+export function playlistItemHigher(listID) {
+    console.log(playlist);
+    let copy = playlist[listID + 1];
+    playlist[listID + 1] = playlist[listID];
+    playlist[listID] = copy;
+    console.log(playlist);
+}
+
+export function playlistItemLower(listID) {
+    console.log(playlist);
+    let copy = playlist[listID - 1];
+    playlist[listID - 1] = playlist[listID];
+    playlist[listID] = copy;
+    console.log(playlist);
 }
 
 function getMusicName(filePath) {

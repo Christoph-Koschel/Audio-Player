@@ -189,11 +189,11 @@ canvas {
 }
 
 .loopControl > a > #playlistControl.notUse {
-    filter: grayscale(1) invert(0.46) ;
+    filter: grayscale(1) invert(0.46);
 }
 
 .loopControl > a > #randomControl.notUse {
-    filter: grayscale(1) invert(0.46) ;
+    filter: grayscale(1) invert(0.46);
 }
 
 .toggleShow {
@@ -259,16 +259,46 @@ canvas {
     width: 100%;
     background-color: #bbbbbb;
     z-index: 0;
+    display: none;
 }
 
-.playlistView > div {
+.playlistView > div:last-of-type {
     display: flex;
+    margin-left: 50px;
+}
+
+.playlistView > div:first-of-type {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.playlistView > div > img {
+    width: 30px;
 }
 
 .playlistView > div > div {
-    padding: 2em;
+    padding: 1em;
     margin: 1em;
     border-radius: 15px;
     background-color: #6b6b6b;
+    width: 90px;
+}
 
+.playlistView > div > div > div {
+    text-align: center;
+}
+
+.playlistView > div > div > div.playlistItemTitle {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.playlistView > div > div > div > img {
+    width: 25px;
+}
+
+.playlistView > div > div > div > img.deactivate {
+    filter: grayscale(1) invert(0.20);
 }
