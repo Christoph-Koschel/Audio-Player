@@ -250,3 +250,25 @@ canvas {
 .modeControl > a.active {
     color: #00c3ac;
 }
+
+.playlistView {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 150px;
+    width: 100%;
+    background-color: #bbbbbb;
+    z-index: 0;
+}
+
+.playlistView > div {
+    display: flex;
+}
+
+.playlistView > div > div {
+    padding: 2em;
+    margin: 1em;
+    border-radius: 15px;
+    background-color: #6b6b6b;
+
+}

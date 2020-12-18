@@ -1,0 +1,62 @@
+@page {
+    margin-bottom: 5pt;
+    margin-top: 5pt
+}
+
+.block_ {
+    display: block;
+    font-family: "Calibri Light", sans-serif;
+    font-size: 2em;
+    letter-spacing: -0.5pt;
+    line-height: 1.2;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0
+}
+.block_1 {
+    display: block;
+    font-family: serif;
+    font-size: 0.75em;
+    line-height: 1.08;
+    margin-bottom: 8pt;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0
+}
+.block_2 {
+    display: block;
+    line-height: 1.2;
+    margin-bottom: 8pt;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0
+}
+.calibre {
+    display: block;
+    font-family: "Arial", sans-serif;
+    font-size: 1em;
+    margin-bottom: 0;
+    margin-left: 5pt;
+    margin-right: 5pt;
+    margin-top: 0;
+    padding-left: 0;
+    padding-right: 0
+}
+.calibre1 {
+    line-height: 1.2;
+    white-space: pre-wrap
+}
+

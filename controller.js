@@ -1,5 +1,13 @@
 import {hasClass, URI, urlParams} from "./global.js";
-import {fadeIn, fadeOut, checkScreenIcon, checkPlayIconSrc, checkRepeatMode, checkActiveModeBTN} from "./ui.js";
+import {
+    fadeIn,
+    fadeOut,
+    checkScreenIcon,
+    checkPlayIconSrc,
+    checkRepeatMode,
+    checkActiveModeBTN,
+    togglePlaylistView
+} from "./ui.js";
 import {startLooper, stopLooper} from "./canvas.js";
 import {checkOfflineData, getDefaultMusicPath, isPlaying, pause, play, timeBackward, timeForward} from "./music.js";
 import {fs, getPath, isFullscreen, openFile, setFullscreen} from "./node.js";
@@ -96,11 +104,11 @@ window.addEventListener("load", () => {
         controlLast();
     });
 
-    document.getElementById("musicBackward").addEventListener("click",() => {
+    document.getElementById("musicBackward").addEventListener("click", () => {
         timeBackward(5);
     });
 
-    document.getElementById("musicForward").addEventListener("click",() => {
+    document.getElementById("musicForward").addEventListener("click", () => {
         timeForward(5);
     });
 
@@ -166,6 +174,10 @@ window.addEventListener("load", () => {
         } else {
             setRandomMusic(true);
         }
+    });
+
+    document.getElementById("editPlaylist").addEventListener("click",() => {
+        togglePlaylistView(true);
     });
     //endregion
     if (urlParams.has("0")) {

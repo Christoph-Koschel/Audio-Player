@@ -134,6 +134,14 @@ export function changeUi(to) {
     }
 }
 
+export function togglePlaylistView(show) {
+    if (show) {
+        document.getElementsByClassName("playlistView")[0].style.display = "unset";
+    } else {
+        document.getElementsByClassName("playlistView")[0].style.display = "none";
+    }
+}
+
 window.addEventListener("load", () => {
     document.getElementsByClassName("toggleShow")[0].addEventListener("mouseover", () => {
         let img = document.getElementById("toggleShowIcon");
