@@ -3,6 +3,27 @@
     font-family: Poopins;
 }
 
+::-webkit-scrollbar {
+    width: 5px;
+    transition: 0.3s;
+}
+
+::-webkit-scrollbar:hover {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 * {
     font-family: Poopins;
 }
@@ -265,6 +286,8 @@ canvas {
 .playlistView > div:last-of-type {
     display: flex;
     margin-left: 50px;
+    margin-right: 50px;
+    overflow: auto;
 }
 
 .playlistView > div:first-of-type {
