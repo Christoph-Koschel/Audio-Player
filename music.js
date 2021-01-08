@@ -101,7 +101,6 @@ function setEvents() {
         }
 
         checkPlayIconSrc();
-        clearYoutubePlayCache(false);
     });
 }
 

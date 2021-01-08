@@ -21,8 +21,11 @@ export function startLooper(autoplay) {
     window.requestAnimationFrame(looper);
 }
 
-export function resumeLooper() {
+export function resumeLooper(autoplay) {
     loop = true;
+    if (autoplay) {
+        play();
+    }
     window.requestAnimationFrame(looper);
 }
 

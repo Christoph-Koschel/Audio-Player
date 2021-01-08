@@ -97,19 +97,26 @@ export function changeMode() {
 }
 
 export function playlistItemHigher(listID) {
-    console.log(playlist);
     let copy = playlist[listID + 1];
     playlist[listID + 1] = playlist[listID];
     playlist[listID] = copy;
-    console.log(playlist);
 }
 
 export function playlistItemLower(listID) {
-    console.log(playlist);
     let copy = playlist[listID - 1];
     playlist[listID - 1] = playlist[listID];
     playlist[listID] = copy;
-    console.log(playlist);
+}
+
+export function playlistItemDelete(listID) {
+    let copy = [];
+    for (let i = 0; i < playlist.length; i++) {
+        if (listID !== i) {
+            copy.push(playlist[i]);
+        }
+    }
+
+    playlist = copy;
 }
 
 function getMusicName(filePath) {

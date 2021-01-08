@@ -1,6 +1,12 @@
 import {isPlaying} from "./music.js";
 import {isFullscreen, path} from "./node.js";
-import {getPlaylistArray, getRepeatMode, playlistItemHigher, playlistItemLower} from "./playlist.js";
+import {
+    getPlaylistArray,
+    getRepeatMode,
+    playlistItemDelete,
+    playlistItemHigher,
+    playlistItemLower
+} from "./playlist.js";
 import {getActivePlayMode, getPlayModeList} from "./mode.js";
 import {hasClass, rand} from "./global.js";
 
@@ -167,7 +173,7 @@ export function loadPlaylistViewEntries() {
         img1.addEventListener("click", function () {
             this.itemID = i;
 
-            if (!hasClass(this,"deactivate")) {
+            if (!hasClass(this, "deactivate")) {
                 playlistItemLower(this.itemID);
                 loadPlaylistViewEntries();
             }
@@ -181,13 +187,27 @@ export function loadPlaylistViewEntries() {
         img2.addEventListener("click", function () {
             this.itemID = i;
 
-            if (!hasClass(this,"deactivate")) {
+            if (!hasClass(this, "deactivate")) {
                 playlistItemHigher(this.itemID);
                 loadPlaylistViewEntries();
             }
         });
 
+        let img3 = document.createElement("img");
+        if (list.length === 1) {
+            img3.classList.add("deactivate");
+        }
+        img3.src = "./res/icon/ban-solid.svg";
+        img3.addEventListener("click", function () {
+            this.itemID = i;
+            if (!hasClass(this, "deactivate")) {
+                playlistItemDelete(this.itemID);
+                loadPlaylistViewEntries();
+            }
+        });
+
         control.appendChild(img1);
+        control.appendChild(img3);
         control.appendChild(img2);
 
         box.appendChild(div);
