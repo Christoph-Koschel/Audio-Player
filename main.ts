@@ -1,7 +1,9 @@
-import {BrowserWindow, app} from "electron";
+import {BrowserWindow, app, globalShortcut} from "electron";
 import * as path from "path";
 import {autoUpdater} from "electron-updater";
 import * as fs from "fs";
+
+const mime = require("mime");
 
 app.on("ready",() => {
     autoUpdater.checkForUpdatesAndNotify();
@@ -18,13 +20,21 @@ app.on("ready",() => {
         }
     });
 
+    let args: string[] = [];
+    for (let i = 0; i < process.argv.length; i++) {
+        let mimeType: string = mime.getType(process.argv[i]);
+        if (mimeType === "audio/mpeg" || mimeType === "audio/wave") {
+            args.push(process.argv[i]);
+        }
+    }
+
     win.setMenu(null);
     win.loadFile(path.join(__dirname, "renderer", "index.html"),{
-        search: "path=" + process.argv[1] || ""
+        search: "path=" + JSON.stringify(args)
     }).then(() => {
-        win.webContents.openDevTools({
-            mode: "undocked"
-        });
+        // win.webContents.openDevTools({
+        //     mode: "undocked"
+        // });
     });
 
     win.on("closed", () => {

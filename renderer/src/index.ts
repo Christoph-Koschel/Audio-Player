@@ -4,6 +4,7 @@ import * as path from "path";
 import * as ytpl from "ytpl";
 import {Player} from "./player";
 import {IPlaylist, Playlist} from "./playlist";
+import {LocalStorage} from "./localStorage";
 
 const mime = require("mime");
 
@@ -12,7 +13,7 @@ export namespace Index {
     const dialog: Electron.Dialog = remote.dialog;
     const player: Player = new Player();
     const playlist: Playlist = new Playlist(path.join(app.getPath("userData"), "playlist"));
-
+    const localStorage: LocalStorage = new LocalStorage();
     export class Main {
         public constructor() {
             let params: URLSearchParams = new URLSearchParams(window.location.search);
@@ -23,12 +24,28 @@ export namespace Index {
                 view.loadCostumePlaylist(playlist);
             });
 
-            if (localStorage.getItem("terms") !== "1") {
+            if (!localStorage.hasItem("terms") || localStorage.getItem("terms") !== "1") {
                 // @ts-ignore
                 document.getElementById("terms").style.display = "block";
             }
 
-            console.log(params.get("path"));
+            if (!localStorage.hasItem("view")) {
+                localStorage.setItem("view", "home");
+            }
+
+            if (!localStorage.hasItem("volume")) {
+                localStorage.setItem("volume", "0.5");
+            }
+
+            if (JSON.parse(<string>params.get("path")).length !== 0) {
+                player.setPlaylist(JSON.parse(<string>params.get("path")));
+                player.setIndex(0);
+                player.play();
+            }
+
+            player.setVolume(parseFloat(<string>localStorage.getItem("volume")));
+            // @ts-ignore
+            document.getElementById("volumeControl").value = parseFloat(<string>localStorage.getItem("volume")) * 100;
 
             document.getElementById("winClose")?.addEventListener("click", () => {
                 remote.getCurrentWindow().close();
@@ -47,7 +64,7 @@ export namespace Index {
             });
 
             // @ts-ignore
-            document.getElementById("termsView").contentWindow.document.getElementById("sub")?.addEventListener("click",() => {
+            document.getElementById("termsView").contentWindow.document.getElementById("sub")?.addEventListener("click", () => {
                 localStorage.setItem("terms", "1");
 
                 // @ts-ignore
@@ -83,9 +100,10 @@ export namespace Index {
                 view.loadPlaylist(player.getPlaylist());
             });
 
-            document.getElementById("volumeControl")?.addEventListener("click",() => {
+            document.getElementById("volumeControl")?.addEventListener("click", () => {
                 // @ts-ignore
                 let value: string = document.getElementById("volumeControl").value;
+                localStorage.setItem("volume", (parseInt(value) / 100).toString());
                 player.setVolume((parseInt(value) / 100));
             });
 
@@ -315,7 +333,8 @@ export namespace Index {
 
             window.addEventListener("resize", this.reloadStyles);
             this.reloadStyles();
-            view.changeView("home"); // TODO change this to a flexible load with setting file
+            // @ts-ignore
+            view.changeView(localStorage.getItem("view"));
 
             player.on("play", () => {
                 document.getElementById("playBTN")?.classList.remove("fa-play-circle");
@@ -386,6 +405,7 @@ export namespace Index {
             this.playlist.style.display = "none";
             this.costumePlaylist.style.display = "none";
             this.currentView = view;
+            localStorage.setItem("view", view);
 
             if (view === "home") {
                 this.load("home");
@@ -518,7 +538,7 @@ export namespace Index {
                     td3.appendChild(upBTN);
                 }
 
-                if (index !== list.length -1) {
+                if (index !== list.length - 1) {
                     td4.appendChild(downBTN);
                 }
 

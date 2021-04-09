@@ -7,6 +7,7 @@ var path = require("path");
 var ytpl = require("ytpl");
 var player_1 = require("./player");
 var playlist_1 = require("./playlist");
+var localStorage_1 = require("./localStorage");
 var mime = require("mime");
 var Index;
 (function (Index) {
@@ -14,6 +15,7 @@ var Index;
     var dialog = electron_1.remote.dialog;
     var player = new player_1.Player();
     var playlist = new playlist_1.Playlist(path.join(app.getPath("userData"), "playlist"));
+    var localStorage = new localStorage_1.LocalStorage();
     var Main = (function () {
         function Main() {
             var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0;
@@ -25,10 +27,22 @@ var Index;
                 (_a = document.getElementById("customPlaylist")) === null || _a === void 0 ? void 0 : _a.setAttribute("playlistName", playlist.name);
                 view.loadCostumePlaylist(playlist);
             });
-            if (localStorage.getItem("terms") !== "1") {
+            if (!localStorage.hasItem("terms") || localStorage.getItem("terms") !== "1") {
                 document.getElementById("terms").style.display = "block";
             }
-            console.log(params.get("path"));
+            if (!localStorage.hasItem("view")) {
+                localStorage.setItem("view", "home");
+            }
+            if (!localStorage.hasItem("volume")) {
+                localStorage.setItem("volume", "0.5");
+            }
+            if (JSON.parse(params.get("path")).length !== 0) {
+                player.setPlaylist(JSON.parse(params.get("path")));
+                player.setIndex(0);
+                player.play();
+            }
+            player.setVolume(parseFloat(localStorage.getItem("volume")));
+            document.getElementById("volumeControl").value = parseFloat(localStorage.getItem("volume")) * 100;
             (_a = document.getElementById("winClose")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
                 electron_1.remote.getCurrentWindow().close();
             });
@@ -72,6 +86,7 @@ var Index;
             });
             (_l = document.getElementById("volumeControl")) === null || _l === void 0 ? void 0 : _l.addEventListener("click", function () {
                 var value = document.getElementById("volumeControl").value;
+                localStorage.setItem("volume", (parseInt(value) / 100).toString());
                 player.setVolume((parseInt(value) / 100));
             });
             (_m = document.getElementById("playlistAppendBTN")) === null || _m === void 0 ? void 0 : _m.addEventListener("click", function () {
@@ -258,7 +273,7 @@ var Index;
             });
             window.addEventListener("resize", this.reloadStyles);
             this.reloadStyles();
-            view.changeView("home");
+            view.changeView(localStorage.getItem("view"));
             player.on("play", function () {
                 var _a, _b;
                 (_a = document.getElementById("playBTN")) === null || _a === void 0 ? void 0 : _a.classList.remove("fa-play-circle");
@@ -310,6 +325,7 @@ var Index;
             this.playlist.style.display = "none";
             this.costumePlaylist.style.display = "none";
             this.currentView = view;
+            localStorage.setItem("view", view);
             if (view === "home") {
                 this.load("home");
                 this.home.style.display = "";

@@ -4,6 +4,7 @@ var electron_1 = require("electron");
 var path = require("path");
 var electron_updater_1 = require("electron-updater");
 var fs = require("fs");
+var mime = require("mime");
 electron_1.app.on("ready", function () {
     electron_updater_1.autoUpdater.checkForUpdatesAndNotify();
     var win = new electron_1.BrowserWindow({
@@ -17,13 +18,17 @@ electron_1.app.on("ready", function () {
             enableRemoteModule: true
         }
     });
+    var args = [];
+    for (var i = 0; i < process.argv.length; i++) {
+        var mimeType = mime.getType(process.argv[i]);
+        if (mimeType === "audio/mpeg" || mimeType === "audio/wave") {
+            args.push(process.argv[i]);
+        }
+    }
     win.setMenu(null);
     win.loadFile(path.join(__dirname, "renderer", "index.html"), {
-        search: "path=" + process.argv[1] || ""
+        search: "path=" + JSON.stringify(args)
     }).then(function () {
-        win.webContents.openDevTools({
-            mode: "undocked"
-        });
     });
     win.on("closed", function () {
         fs.unlinkSync(path.join(electron_1.app.getPath("temp"), "ap2.tmp"));
