@@ -1,116 +1,32 @@
-const {ipcMain, app, BrowserWindow, dialog} = require("electron");
-const {autoUpdater} = require("electron-updater");
-const fs = require("fs");
-let ytList = [];
-
-
-app.on("ready", () => {
-    console.log(app.getPath("userData"));
-
-    app.on("before-quit", () => {
-        for (let i = 0; i < ytList.length; i++) {
-            let path = app.getPath("userData") + "\\" + ytList[i] + ".mp3";
-            if (fs.existsSync(path) && fs.statSync(path).isFile()) {
-                fs.unlinkSync(path);
-            }
-        }
-    });
-
-    let WIN = new BrowserWindow({
-        width: 1020,
-        height: 500,
-        minWidth: 1020,
-        minHeight: 500,
-        icon: __dirname + "\\res\\icon\\icon.ico",
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var electron_1 = require("electron");
+var path = require("path");
+var electron_updater_1 = require("electron-updater");
+var fs = require("fs");
+electron_1.app.on("ready", function () {
+    electron_updater_1.autoUpdater.checkForUpdatesAndNotify();
+    var win = new electron_1.BrowserWindow({
+        title: "Sirent",
+        frame: false,
+        icon: path.join(__dirname, "res", "icon", "icon.png"),
+        minWidth: 1100,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            enableRemoteModule: true
         }
     });
-
-    WIN.on("close", () => {
-        app.quit();
-    });
-    WIN.setMenu(null);
-    WIN.webContents.openDevTools();
-
-    if (process.argv[1] !== undefined && process.argv[1] !== null) {
-        WIN.loadFile("index.html", {
-            query: [process.argv[1]]
+    win.setMenu(null);
+    win.loadFile(path.join(__dirname, "renderer", "index.html"), {
+        search: "path=" + process.argv[1] || ""
+    }).then(function () {
+        win.webContents.openDevTools({
+            mode: "undocked"
         });
-    } else {
-        WIN.loadFile("index.html");
-    }
-
-    ipcMain.on("isFullscreen", (event) => {
-        event.returnValue = WIN.isFullScreen();
     });
-
-    ipcMain.handle("setFullscreen", (event, args) => {
-        WIN.setFullScreen(args);
+    win.on("closed", function () {
+        fs.unlinkSync(path.join(electron_1.app.getPath("temp"), "ap2.tmp"));
+        electron_1.app.quit();
     });
-
-    ipcMain.on("userData", (event) => {
-        event.returnValue = app.getPath("userData");
-    });
-
-    ipcMain.on("updateYtDataList",(event, args) => {
-        ytList = args;
-    });
-
-    ipcMain.on("openFile", (event) => {
-        let path = dialog.showOpenDialogSync(WIN, {
-            properties: ["openFile", "multiSelections"],
-            filters: [
-                {
-                    name: "Music Files",
-                    extensions: ["mp3", "wav"]
-                },
-                {
-                    name: "All Files",
-                    extensions: ["*"]
-                }
-            ]
-        });
-        if (!path) {
-            let path = app.getPath("userData") + "\\default.mp3";
-            if (!fs.existsSync(path) && !fs.statSync(path).isFile()) {
-                fs.writeFileSync(path, "");
-            }
-            path = [
-                app.getPath("userData") + "\\default.mp3"
-            ];
-        }
-        event.sender.send("openFile", JSON.stringify(path))
-    });
-
-    /*
-    * ===================================
-    * == App Updater
-    * ===================================
-    */
-    //region
-
-    ipcMain.on("check_update",() => {
-        autoUpdater.checkForUpdatesAndNotify();
-    });
-
-    autoUpdater.on('update-available', () => {
-        WIN.webContents.send('update_available');
-    });
-    autoUpdater.on('update-downloaded', () => {
-        WIN.webContents.send('update_downloaded');
-        fs.writeFileSync(app.getPath("userData") + "\\updated", "");
-    });
-
-    ipcMain.on("appVersion", (event) => {
-        event.sender.send("appVersion", app.getVersion());
-    });
-
-    ipcMain.on('restart_app', () => {
-        autoUpdater.quitAndInstall();
-    });
-
-    //endregion
 });
-
-
+//# sourceMappingURL=main.js.map

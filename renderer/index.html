@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sirent</title>
+    <link rel="stylesheet" href="./Font Awesome Pro-v5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script>window.addEventListener("load", require("./src/index").Index.Main.main);</script>
+</head>
+<body>
+<div class="siteMenu">
+    <ul class="mainList">
+        <li id="homeBtn"><i class="fas fa-home"></i><span>Home</span></li>
+        <li id="youtubeBtn"><i class="fab fa-youtube"></i><span>YouTube</span></li>
+    </ul>
+    <div class="headline"><span>Playlists</span></div>
+    <div class="playlistListWrapper">
+        <ul class="playlistList">
+        </ul>
+    </div>
+    <div class="addPlaylistButton">
+        <i class="far fa-plus-circle"></i><span>Add Playlist</span>
+    </div>
+</div>
+<div class="body">
+    <div id="home">
+        <div id="cardPanel">
+
+        </div>
+    </div>
+    <div id="youtube">
+        <div>
+            <h1>Play Public Youtube Playlist</h1>
+            <input id="loadPlaylistURL" type="url" placeholder="URL">
+            <br>
+            <button id="loadPlaylistURLSubmit">
+                Load&nbsp;&nbsp;<i class="fas fa-play"></i>
+            </button>
+        </div>
+        <div>
+            <h1>Play Public Youtube Video</h1>
+            <input id="loadVideoURL" type="url" placeholder="URL">
+            <br>
+            <button id="loadVideoURLSubmit">
+                Load&nbsp;&nbsp;<i class="fas fa-play"></i>
+            </button>
+        </div>
+    </div>
+    <div id="playlist">
+        <div class="playlistWrapper">
+            <table id="playlistTable"></table>
+        </div>
+        <div class="playlistControl">
+            <button id="playlistAppendBTN">
+                Append&nbsp;&nbsp;<i class="fal fa-plus"></i>
+            </button>
+            <button id="playlistClearBTN">
+                Clear&nbsp;&nbsp;<i class="fal fa-trash"></i>
+            </button>
+            <button id="playlistAppendLinkBTN">
+                Append URL&nbsp;&nbsp;<i class="fab fa-youtube"></i>
+            </button>
+        </div>
+    </div>
+    <div id="customPlaylist" playlistName="">
+        <div class="playlistWrapper">
+            <table id="customPlaylistTable"></table>
+        </div>
+        <div class="playlistControl">
+            <button id="customPlaylistAppendBTN">
+                Append&nbsp;&nbsp;<i class="fal fa-plus"></i>
+            </button>
+            <button id="customPlaylistAppendLinkBTN">
+                Append URL&nbsp;&nbsp;<i class="fab fa-youtube"></i>
+            </button>
+            <button id="customPlaylistDeleteBTN">
+                Delete&nbsp;&nbsp;<i class="fal fa-trash"></i>
+            </button>
+            <button id="customPlaylistPlayBTN">
+                Play&nbsp;&nbsp;<i class="fas fa-play"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="audio">
+        <input id="volumeControl" type="range">
+    </div>
+    <div class="player">
+            <div>
+                <i id="playBackward" class="fal fa-backward"></i>
+                <i id="playBTN" class="fal fa-play-circle"></i>
+                <i id="playForward" class="fal fa-forward"></i>
+
+            </div>
+            <div>
+                <div id="bar">
+                    <div id="barFill">
+
+                    </div>
+                </div>
+            </div>
+    </div>
+    <div class="timeControl">
+        <span id="playerInfo"></span>
+        <span id="timeSpan">00:00/00:00</span>
+    </div>
+</div>
+<div id="clearer">
+    <div id="linkView">
+        <input id="linkViewInput" type="url" placeholder="URL">
+        <br>
+        <button id="linkViewSubmit">
+            Add&nbsp;&nbsp;<i class="fal fa-plus"></i>
+        </button>
+        <br>
+        <button id="linkViewCancel">
+            Cancel&nbsp;&nbsp;<i class="fal fa-ban"></i>
+        </button>
+    </div>
+
+    <div id="playlistView">
+        <input id="playlistViewInput" type="url" placeholder="Playlist name">
+        <br>
+        <button id="playlistViewSubmit">
+            Add&nbsp;&nbsp;<i class="fal fa-plus"></i>
+        </button>
+        <br>
+        <button id="playlistViewCancel">
+            Cancel&nbsp;&nbsp;<i class="fal fa-ban"></i>
+        </button>
+    </div>
+</div>
+<div class="navbar">
+    <div class="title">
+        <span id="version"></span>
+    </div>
+    <div class="windowNavigation">
+        <i id="winMin" class="fal fa-window-minimize"></i>
+        <i id="winSize" class="fal fa-square"></i>
+        <i id="winClose" class="fal fa-times"></i>
+    </div>
+</div>
+</body>
+</html>
