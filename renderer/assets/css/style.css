@@ -1,0 +1,606 @@
+@font-face {
+    src: url("../font/Poppins-Regular.ttf");
+    font-family: Poppins;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #ffffff0d;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+button {
+    font-size: 15px;
+    padding: 5px 25px;
+    margin: 0;
+    height: 36px;
+    background-color: #92b4f2;
+    border: none;
+    outline: none;
+    border-radius: 15px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #3676e8;
+}
+
+button:active {
+    background-color: #dadada;
+    transition: 0s;
+}
+
+input[type=range] {
+    width: 100%;
+    margin: 2.5px 0;
+    background-color: transparent;
+    -webkit-appearance: none;
+}
+
+input[type=range]:focus {
+    outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    background: rgba(100, 149, 237, 0.78);
+    border-radius: 15px;
+    width: 100%;
+    height: 10px;
+    cursor: pointer;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    margin-top: -2.7px;
+    width: 15px;
+    height: 15px;
+    background: #ffffff;
+    border: 1px solid #00001e;
+    border-radius: 15px;
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #92b4f2;
+}
+
+input[type=range]::-moz-range-track {
+    background: rgba(100, 149, 237, 0.78);
+    border-radius: 1.3px;
+    width: 100%;
+    height: 10px;
+    cursor: pointer;
+}
+
+input[type=range]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #ffffff;
+    border: 1px solid #00001e;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+input[type=range]::-ms-track {
+    background: transparent;
+    border-color: transparent;
+    border-width: 3.4px 0;
+    color: transparent;
+    width: 100%;
+    height: 10px;
+    cursor: pointer;
+}
+
+input[type=range]::-ms-fill-lower {
+    background: #3676e8;
+    border: 0.2px solid #010101;
+    border-radius: 2.6px;
+}
+
+input[type=range]::-ms-fill-upper {
+    background: rgba(100, 149, 237, 0.78);
+    border: 0.2px solid #010101;
+    border-radius: 2.6px;
+}
+
+input[type=range]::-ms-thumb {
+    width: 15px;
+    height: 15px;
+    background: #ffffff;
+    border: 1px solid #00001e;
+    border-radius: 15px;
+    cursor: pointer;
+    margin-top: 0;
+}
+
+input[type=range]:focus::-ms-fill-lower {
+    background: rgba(100, 149, 237, 0.78);
+}
+
+input[type=range]:focus::-ms-fill-upper {
+    background: #92b4f2;
+}
+
+@supports (-ms-ime-align:auto) {
+    input[type=range] {
+        margin: 0;
+    }
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-areas: "siteMenu body body body"
+                         "siteMenu body body body"
+                         "siteMenu body body body"
+                         "footer footer footer footer";
+    grid-template-columns: 200px auto;
+    grid-auto-rows: auto auto auto 60px;
+}
+
+* {
+    color: white;
+    font-family: Poppins;
+    font-size: 18px;
+}
+
+.body {
+    grid-area: body;
+    background: linear-gradient(to bottom, rgb(169 169 169) 0%, rgb(70 70 70) 25%, rgba(11, 11, 11, 1) 100%);
+}
+
+.body > div {
+    margin: 60px 20px 0 20px;
+}
+
+.body > div#home > div#cardPanel > div {
+    display: block;
+    float: left;
+    width: 130px;
+    height: 130px;
+    padding: 20px;
+    background-color: #6495ED;
+    border-radius: 20px;
+    text-align: center;
+    margin: 10px;
+}
+
+.body > div#home > div#cardPanel > div:hover {
+    box-shadow: 3px 3px 15px 3px #0000009c;
+}
+
+.body > div#home > div#cardPanel > div > i {
+    font-size: 45px;
+    margin-top: 20px;
+}
+
+.body > div#playlist > div.playlistWrapper {
+    overflow: auto;
+}
+
+.body > div#playlist > div.playlistWrapper > table {
+    width: 100%;
+}
+
+.body > div#playlist > div.playlistWrapper > table > tr > td {
+    cursor: default;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
+
+.body > div#playlist > div.playlistWrapper > table > tr:hover > td {
+    color: #4169E1;
+}
+
+.body > div#playlist > div.playlistWrapper > table > tr.active > td {
+    color: #92b4f2;
+}
+
+.body > div#playlist > div.playlistControl {
+    position: inherit;
+    bottom: 10px;
+    left: 0;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    box-shadow: 0 -5px 12px 1px #ffffff1f;
+    border-radius: 10px;
+}
+
+.body > div#playlist > div.playlistControl > button {
+    margin: auto 0;
+}
+
+.body > div#playlist > div.playlistControl > *:first-child {
+    margin-left: 20px;
+}
+
+.body > div#playlist > div.playlistControl > *:last-child {
+    margin-right: 20px;
+}
+
+.body > div#customPlaylist > div.playlistWrapper {
+    overflow: auto;
+}
+
+.body > div#customPlaylist > div.playlistWrapper > table {
+    width: 100%;
+}
+
+.body > div#customPlaylist > div.playlistWrapper > table > tr > td {
+    cursor: default;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
+
+.body > div#customPlaylist > div.playlistControl {
+    position: inherit;
+    bottom: 10px;
+    left: 0;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    box-shadow: 0 -5px 12px 1px #ffffff1f;
+    border-radius: 10px;
+}
+
+.body > div#customPlaylist > div.playlistControl > button {
+    margin: auto 0;
+}
+
+.body > div#customPlaylist > div.playlistControl > *:first-child {
+    margin-left: 20px;
+}
+
+.body > div#customPlaylist > div.playlistControl > *:last-child {
+    margin-right: 20px;
+}
+
+.body > div#customPlaylist > div.playlistControl {
+    position: inherit;
+    bottom: 10px;
+    left: 0;
+    height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+    box-shadow: 0 -5px 12px 1px #ffffff1f;
+    border-radius: 10px;
+}
+
+.body > div#customPlaylist > div.playlistControl > button {
+    margin: auto 0;
+}
+
+.body > div#customPlaylist > div.playlistControl > *:first-child {
+    margin-left: 20px;
+}
+
+.body > div#customPlaylist > div.playlistControl > *:last-child {
+    margin-right: 20px;
+}
+
+.siteMenu {
+    grid-area: siteMenu;
+    background-color: #151515;
+}
+
+.siteMenu > ul.mainList {
+    margin-top: 40px;
+    padding: 0;
+    list-style: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
+
+.siteMenu > ul.mainList > li {
+    padding: 5px 20px;
+    border-left: 5px solid transparent;
+    cursor: default;
+}
+
+.siteMenu > ul.mainList > li.active {
+    border-left: 5px solid #6495ED;
+}
+
+.siteMenu > ul.mainList > li:hover {
+    border-left: 5px solid #4169E1;
+    background-color: #ffffff14;
+}
+
+.siteMenu > ul.mainList > li:active {
+    border-left: 5px solid #6495ED;
+    background-color: #ffffff14;
+}
+
+.siteMenu > ul.mainList > li > i {
+    margin-right: 5px;
+}
+
+.siteMenu > div.headline {
+    text-align: center;
+    margin: 10px 0 5px 0;
+}
+
+.siteMenu > div.headline > span {
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    text-transform: uppercase;
+    font-size: 15px;
+    letter-spacing: 2px;
+}
+
+.siteMenu > div.playlistListWrapper {
+    overflow: auto;
+}
+
+.siteMenu > div.playlistListWrapper > ul.playlistList {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
+
+.siteMenu > div.playlistListWrapper > ul.playlistList > li {
+    padding: 5px 20px;
+    border-left: 5px solid transparent;
+}
+
+.siteMenu > div.playlistListWrapper > ul.playlistList > li:hover {
+    font-weight: bold;
+}
+
+.siteMenu > div.addPlaylistButton {
+    text-align: center;
+    padding: 5px 20px;
+    border-left: 5px solid transparent;
+    cursor: default;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
+
+.siteMenu > div.addPlaylistButton > i {
+    margin-right: 5px;
+    color: #8a8a8a;
+}
+
+.siteMenu > div.addPlaylistButton > span {
+    color: #8a8a8a;
+}
+
+.siteMenu > div.addPlaylistButton:hover > span {
+    color: white;
+}
+
+.siteMenu > div.addPlaylistButton:hover > i {
+    color: white;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    grid-area: footer;
+    background-color: #212020f7;
+    vertical-align: center;
+}
+
+.footer > div {
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 5px 20px;
+}
+
+.footer > div.audio > input[type="range"] {
+    width: 150px;
+}
+
+.footer > div.player > div > div#bar {
+    width: 250px;
+    height: 5px;
+    background-color: #717171;
+    border-radius: 2px;
+}
+
+.footer > div.player > div > div#bar > div#barFill {
+    width: 0.1%;
+    height: 5px;
+    border-radius: 2px;
+    background-color: #6495ed;
+}
+
+.footer > div.player > div {
+    text-align: center;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
+
+.footer > div.player > div > i {
+    cursor: default;
+    font-size: 25px;
+
+}
+
+.footer > div.timeControl {
+    width: 270px;
+}
+
+.footer > div.timeControl > span {
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
+
+.footer > div.timeControl > span#timeSpan {
+    float: right;
+}
+
+.navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: 30px;
+    -webkit-app-region: drag;
+}
+
+.navbar > .title {
+    float: left;
+    max-height: 30px;
+    margin-right: auto;
+    cursor: default;
+    text-align: center;
+    width: 200px;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
+
+.navbar > .title > span {
+    font-size: 18px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.navbar > .windowNavigation {
+    float: right;
+    max-height: 30px;
+    margin-left: auto;
+    background-color: #2b2b2b;
+    border-bottom-left-radius: 5px;
+    cursor: default;
+}
+
+.navbar > .windowNavigation > i {
+    width: 15px;
+    text-align: center;
+    font-size: 15px;
+    padding: 7.5px 15px;
+    -webkit-app-region: no-drag;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
+
+.navbar > .windowNavigation > i:first-of-type {
+    border-bottom-left-radius: 5px;
+}
+
+.navbar > .windowNavigation > i:hover {
+    background-color: #6161618c;
+}
+
+.navbar > .windowNavigation > i:last-of-type:hover {
+    background-color: #b91212;
+}
+
+#clearer {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#clearer > div {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 200px;
+    width: 400px;
+    padding: 25px;
+    border-radius: 15px;
+    margin-top: -150px;
+    margin-left: -225px;
+    background: #212020f7;
+    text-align: center;
+    box-shadow: 0 0 8px 4px #ffffff2e;
+}
+
+#clearer > div > input[type="url"] {
+    color: black;
+    margin-bottom: 30px;
+}
+
+#clearer > div > input[type="url"]:focus {
+    outline: transparent;
+}
+
+#clearer > div > button {
+    margin-bottom: 20px;
+}
+
+#youtube {
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+}
+
+#youtube > div {
+    margin-bottom: 50px;
+}
+
+#youtube > div > input {
+    margin-bottom: 20px;
+    color: black;
+}
+
+#youtube > div > input:focus {
+    outline: none;
+}
+
+#terms {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #ffffff7d;
+}
+
+#terms > iframe {
+    margin: 50px;
+    background-color: white;
+    width: calc(100% - 100px);
+    height: calc(100% - 100px);
+}
