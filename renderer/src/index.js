@@ -16,7 +16,7 @@ var Index;
     var playlist = new playlist_1.Playlist(path.join(app.getPath("userData"), "playlist"));
     var Main = (function () {
         function Main() {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z;
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0;
             var params = new URLSearchParams(window.location.search);
             var view = new Views();
             playlist.build("list", document.getElementsByClassName("playlistList")[0], function (playlist) {
@@ -25,6 +25,9 @@ var Index;
                 (_a = document.getElementById("customPlaylist")) === null || _a === void 0 ? void 0 : _a.setAttribute("playlistName", playlist.name);
                 view.loadCostumePlaylist(playlist);
             });
+            if (localStorage.getItem("terms") !== "1") {
+                document.getElementById("terms").style.display = "block";
+            }
             console.log(params.get("path"));
             (_a = document.getElementById("winClose")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
                 electron_1.remote.getCurrentWindow().close();
@@ -40,14 +43,18 @@ var Index;
                     electron_1.remote.getCurrentWindow().maximize();
                 }
             });
-            (_d = document.getElementById("version")) === null || _d === void 0 ? void 0 : _d.innerHTML = "Sirent v" + app.getVersion();
-            (_e = document.getElementById("homeBtn")) === null || _e === void 0 ? void 0 : _e.addEventListener("click", function () {
+            (_d = document.getElementById("termsView").contentWindow.document.getElementById("sub")) === null || _d === void 0 ? void 0 : _d.addEventListener("click", function () {
+                localStorage.setItem("terms", "1");
+                document.getElementById("terms").style.display = "none";
+            });
+            (_e = document.getElementById("version")) === null || _e === void 0 ? void 0 : _e.innerHTML = "Sirent v" + app.getVersion();
+            (_f = document.getElementById("homeBtn")) === null || _f === void 0 ? void 0 : _f.addEventListener("click", function () {
                 view.changeView("home");
             });
-            (_f = document.getElementById("youtubeBtn")) === null || _f === void 0 ? void 0 : _f.addEventListener("click", function () {
+            (_g = document.getElementById("youtubeBtn")) === null || _g === void 0 ? void 0 : _g.addEventListener("click", function () {
                 view.changeView("youtube");
             });
-            (_g = document.getElementById("playBTN")) === null || _g === void 0 ? void 0 : _g.addEventListener("click", function () {
+            (_h = document.getElementById("playBTN")) === null || _h === void 0 ? void 0 : _h.addEventListener("click", function () {
                 if (player.isPlaying()) {
                     player.pause();
                 }
@@ -55,19 +62,19 @@ var Index;
                     player.resume();
                 }
             });
-            (_h = document.getElementById("playForward")) === null || _h === void 0 ? void 0 : _h.addEventListener("click", function () {
+            (_j = document.getElementById("playForward")) === null || _j === void 0 ? void 0 : _j.addEventListener("click", function () {
                 player.playIndexUp();
                 view.loadPlaylist(player.getPlaylist());
             });
-            (_j = document.getElementById("playBackward")) === null || _j === void 0 ? void 0 : _j.addEventListener("click", function () {
+            (_k = document.getElementById("playBackward")) === null || _k === void 0 ? void 0 : _k.addEventListener("click", function () {
                 player.playIndexDown();
                 view.loadPlaylist(player.getPlaylist());
             });
-            (_k = document.getElementById("volumeControl")) === null || _k === void 0 ? void 0 : _k.addEventListener("click", function () {
+            (_l = document.getElementById("volumeControl")) === null || _l === void 0 ? void 0 : _l.addEventListener("click", function () {
                 var value = document.getElementById("volumeControl").value;
                 player.setVolume((parseInt(value) / 100));
             });
-            (_l = document.getElementById("playlistAppendBTN")) === null || _l === void 0 ? void 0 : _l.addEventListener("click", function () {
+            (_m = document.getElementById("playlistAppendBTN")) === null || _m === void 0 ? void 0 : _m.addEventListener("click", function () {
                 var selectedFiles = dialog.showOpenDialogSync({
                     properties: ["openFile", "multiSelections"],
                     filters: [
@@ -88,12 +95,12 @@ var Index;
                 });
                 view.loadPlaylist(player.getPlaylist());
             });
-            (_m = document.getElementById("playlistAppendLinkBTN")) === null || _m === void 0 ? void 0 : _m.addEventListener("click", function () {
+            (_o = document.getElementById("playlistAppendLinkBTN")) === null || _o === void 0 ? void 0 : _o.addEventListener("click", function () {
                 var _a, _b;
                 (_a = document.getElementById("clearer")) === null || _a === void 0 ? void 0 : _a.style.display = "block";
                 (_b = document.getElementById("linkView")) === null || _b === void 0 ? void 0 : _b.style.display = "block";
             });
-            (_o = document.getElementById("linkViewSubmit")) === null || _o === void 0 ? void 0 : _o.addEventListener("click", function () {
+            (_p = document.getElementById("linkViewSubmit")) === null || _p === void 0 ? void 0 : _p.addEventListener("click", function () {
                 var _a, _b, _c;
                 var url = document.getElementById("linkViewInput").value;
                 document.getElementById("linkViewInput").value = "";
@@ -116,12 +123,12 @@ var Index;
                     view.loadPlaylist(player.getPlaylist());
                 }
             });
-            (_p = document.getElementById("linkViewCancel")) === null || _p === void 0 ? void 0 : _p.addEventListener("click", function () {
+            (_q = document.getElementById("linkViewCancel")) === null || _q === void 0 ? void 0 : _q.addEventListener("click", function () {
                 var _a, _b;
                 (_a = document.getElementById("linkView")) === null || _a === void 0 ? void 0 : _a.style.display = "none";
                 (_b = document.getElementById("clearer")) === null || _b === void 0 ? void 0 : _b.style.display = "none";
             });
-            (_q = document.getElementById("playlistClearBTN")) === null || _q === void 0 ? void 0 : _q.addEventListener("click", function () {
+            (_r = document.getElementById("playlistClearBTN")) === null || _r === void 0 ? void 0 : _r.addEventListener("click", function () {
                 var _a;
                 if (player.isPlaying()) {
                     player.pause();
@@ -131,7 +138,7 @@ var Index;
                 (_a = document.getElementById("barFill")) === null || _a === void 0 ? void 0 : _a.style.width = "0%";
                 view.loadPlaylist(player.getPlaylist());
             });
-            (_r = document.getElementById("loadPlaylistURLSubmit")) === null || _r === void 0 ? void 0 : _r.addEventListener("click", function () {
+            (_s = document.getElementById("loadPlaylistURLSubmit")) === null || _s === void 0 ? void 0 : _s.addEventListener("click", function () {
                 ytpl.getPlaylistID(document.getElementById("loadPlaylistURL").value).then(function (id) {
                     ytpl(id).then(function (playlist) {
                         var list = [];
@@ -145,7 +152,7 @@ var Index;
                     });
                 });
             });
-            (_s = document.getElementById("loadVideoURLSubmit")) === null || _s === void 0 ? void 0 : _s.addEventListener("click", function () {
+            (_t = document.getElementById("loadVideoURLSubmit")) === null || _t === void 0 ? void 0 : _t.addEventListener("click", function () {
                 if (document.getElementById("loadPlaylistURL").value !== "") {
                     player.setPlaylist([document.getElementById("loadPlaylistURL").value]);
                     player.setIndex(0);
@@ -153,12 +160,12 @@ var Index;
                     document.getElementById("loadPlaylistURL").value = "";
                 }
             });
-            (_t = document.getElementsByClassName("addPlaylistButton")[0]) === null || _t === void 0 ? void 0 : _t.addEventListener("click", function () {
+            (_u = document.getElementsByClassName("addPlaylistButton")[0]) === null || _u === void 0 ? void 0 : _u.addEventListener("click", function () {
                 var _a, _b;
                 (_a = document.getElementById("clearer")) === null || _a === void 0 ? void 0 : _a.style.display = "block";
                 (_b = document.getElementById("playlistView")) === null || _b === void 0 ? void 0 : _b.style.display = "block";
             });
-            (_u = document.getElementById("playlistViewSubmit")) === null || _u === void 0 ? void 0 : _u.addEventListener("click", function () {
+            (_v = document.getElementById("playlistViewSubmit")) === null || _v === void 0 ? void 0 : _v.addEventListener("click", function () {
                 var _a, _b;
                 if (document.getElementById("playlistViewInput").value !== "") {
                     playlist.add(document.getElementById("playlistViewInput").value);
@@ -175,12 +182,12 @@ var Index;
                 (_a = document.getElementById("clearer")) === null || _a === void 0 ? void 0 : _a.style.display = "none";
                 (_b = document.getElementById("playlistView")) === null || _b === void 0 ? void 0 : _b.style.display = "none";
             });
-            (_v = document.getElementById("playlistViewCancel")) === null || _v === void 0 ? void 0 : _v.addEventListener("click", function () {
+            (_w = document.getElementById("playlistViewCancel")) === null || _w === void 0 ? void 0 : _w.addEventListener("click", function () {
                 var _a, _b;
                 (_a = document.getElementById("clearer")) === null || _a === void 0 ? void 0 : _a.style.display = "none";
                 (_b = document.getElementById("playlistView")) === null || _b === void 0 ? void 0 : _b.style.display = "none";
             });
-            (_w = document.getElementById("customPlaylistPlayBTN")) === null || _w === void 0 ? void 0 : _w.addEventListener("click", function () {
+            (_x = document.getElementById("customPlaylistPlayBTN")) === null || _x === void 0 ? void 0 : _x.addEventListener("click", function () {
                 var _a;
                 var name = (_a = document.getElementById("customPlaylist")) === null || _a === void 0 ? void 0 : _a.getAttribute("playlistName");
                 if (name === null) {
@@ -199,12 +206,12 @@ var Index;
                     }
                 }
             });
-            (_x = document.getElementById("customPlaylistAppendLinkBTN")) === null || _x === void 0 ? void 0 : _x.addEventListener("click", function () {
+            (_y = document.getElementById("customPlaylistAppendLinkBTN")) === null || _y === void 0 ? void 0 : _y.addEventListener("click", function () {
                 var _a, _b;
                 (_a = document.getElementById("clearer")) === null || _a === void 0 ? void 0 : _a.style.display = "block";
                 (_b = document.getElementById("linkView")) === null || _b === void 0 ? void 0 : _b.style.display = "block";
             });
-            (_y = document.getElementById("customPlaylistAppendBTN")) === null || _y === void 0 ? void 0 : _y.addEventListener("click", function () {
+            (_z = document.getElementById("customPlaylistAppendBTN")) === null || _z === void 0 ? void 0 : _z.addEventListener("click", function () {
                 var _a;
                 var name = (_a = document.getElementById("customPlaylist")) === null || _a === void 0 ? void 0 : _a.getAttribute("playlistName");
                 if (!name) {
@@ -232,7 +239,7 @@ var Index;
                     view.loadCostumePlaylist(playlist.getPlaylistByName(name));
                 }
             });
-            (_z = document.getElementById("customPlaylistDeleteBTN")) === null || _z === void 0 ? void 0 : _z.addEventListener("click", function () {
+            (_0 = document.getElementById("customPlaylistDeleteBTN")) === null || _0 === void 0 ? void 0 : _0.addEventListener("click", function () {
                 var _a;
                 var name = (_a = document.getElementById("customPlaylist")) === null || _a === void 0 ? void 0 : _a.getAttribute("playlistName");
                 if (!name) {
@@ -368,13 +375,13 @@ var Index;
                 table.appendChild(tr);
             });
         };
-        Views.prototype.loadCostumePlaylist = function (playlist) {
+        Views.prototype.loadCostumePlaylist = function (playlistObj) {
             var _this = this;
             var _a;
             var table = document.getElementById("customPlaylistTable");
-            (_a = document.getElementById("playlistName")) === null || _a === void 0 ? void 0 : _a.setAttribute("playlistName", playlist.name);
+            (_a = document.getElementById("playlistName")) === null || _a === void 0 ? void 0 : _a.setAttribute("playlistName", playlistObj.name);
             table.innerHTML = "";
-            var list = playlist.items;
+            var list = playlistObj.items;
             list.forEach(function (value, index, array) {
                 var tr = document.createElement("tr");
                 var td1 = document.createElement("td");
@@ -387,8 +394,39 @@ var Index;
                 else {
                     td2.innerHTML = path.basename(value);
                 }
+                var td3 = document.createElement("td");
+                var upBTN = document.createElement("button");
+                upBTN.innerHTML = "<i class=\"fas fa-caret-up\"></i>";
+                upBTN.addEventListener("click", function () {
+                    playlist.moveUp(playlistObj.name, index);
+                    _this.loadCostumePlaylist(playlist.getPlaylistByName(playlistObj.name));
+                });
+                var td4 = document.createElement("td");
+                var downBTN = document.createElement("button");
+                downBTN.innerHTML = "<i class=\"fas fa-caret-down\"></i>";
+                downBTN.addEventListener("click", function () {
+                    playlist.moveDown(playlistObj.name, index);
+                    _this.loadCostumePlaylist(playlist.getPlaylistByName(playlistObj.name));
+                });
+                var td5 = document.createElement("td");
+                var deleteBTN = document.createElement("button");
+                deleteBTN.innerHTML = "<i class=\"fal fa-trash\"></i>";
+                deleteBTN.addEventListener("click", function () {
+                    playlist.removeItem(playlistObj.name, index);
+                    _this.loadCostumePlaylist(playlist.getPlaylistByName(playlistObj.name));
+                });
+                if (index !== 0) {
+                    td3.appendChild(upBTN);
+                }
+                if (index !== list.length - 1) {
+                    td4.appendChild(downBTN);
+                }
+                td5.appendChild(deleteBTN);
                 tr.appendChild(td1);
                 tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td4);
+                tr.appendChild(td5);
                 table.appendChild(tr);
             });
         };

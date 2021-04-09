@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import {Crypto} from "./crypto";
 import Hash = Crypto.Hash;
+import {cpus} from "os";
 
 export interface IPlaylist {
     name: string;
@@ -30,8 +31,8 @@ export class Playlist {
             let value: IPlaylist = playlists[i];
             if (type === "list") {
                 let li: HTMLLIElement = document.createElement("li");
-                li.addEventListener("click",() => {
-                   eventFunction(value);
+                li.addEventListener("click", () => {
+                    eventFunction(value);
                 });
 
                 let span: HTMLSpanElement = document.createElement("span");
@@ -42,7 +43,7 @@ export class Playlist {
 
             } else if (type === "block") {
                 let div: HTMLDivElement = document.createElement("div");
-                div.addEventListener("click",() => {
+                div.addEventListener("click", () => {
                     eventFunction(value);
                 });
                 let a: HTMLAnchorElement = document.createElement("a");
@@ -81,7 +82,7 @@ export class Playlist {
         return null;
     }
 
-    public addItem(playlist: string, item: string) {
+    public addItem(playlist: string, item: string): void {
         let playlists: IPlaylist[] = this.getPlaylists();
 
         for (let i: number = 0; i < playlists.length; i++) {
@@ -94,13 +95,64 @@ export class Playlist {
         this.setPlaylist(playlists);
     }
 
+    public removeItem(name: string, index: number): void {
+        let playlists: IPlaylist[] = this.getPlaylists();
+
+        for (let i: number = 0; i < playlists.length; i++) {
+            if (playlists[i].name === name) {
+                let updatedItems: string[] = [];
+
+                for (let k = 0; k < playlists[i].items.length; k++) {
+                    if (k !== index) {
+                        updatedItems.push(playlists[i].items[k]);
+                    }
+                }
+
+                playlists[i].items = updatedItems;
+                break;
+            }
+        }
+
+        this.setPlaylist(playlists);
+    }
+
     public deleteByName(name: string) {
         let playlists: IPlaylist[] = this.getPlaylists();
         let updatedPlaylists: IPlaylist[] = [];
-        for (let i:number = 0; i < playlists.length; i++) {
+        for (let i: number = 0; i < playlists.length; i++) {
             if (playlists[i].name !== name) {
                 updatedPlaylists.push(playlists[i]);
             }
+        }
+
+        this.setPlaylist(updatedPlaylists);
+    }
+
+    public moveUp(name: string, index: number): void {
+        let playlists: IPlaylist[] = this.getPlaylists();
+        let updatedPlaylists: IPlaylist[] = [];
+        for (let i: number = 0; i < playlists.length; i++) {
+            if (playlists[i].name === name) {
+                console.log(index)
+                playlists[i].items = this.swap(playlists[i].items, index, index -1);
+            }
+
+            updatedPlaylists.push(playlists[i]);
+        }
+
+        this.setPlaylist(updatedPlaylists);
+    }
+
+    public moveDown(name: string, index: number): void {
+        let playlists: IPlaylist[] = this.getPlaylists();
+        let updatedPlaylists: IPlaylist[] = [];
+        for (let i: number = 0; i < playlists.length; i++) {
+            if (playlists[i].name === name) {
+                console.log(index)
+                playlists[i].items = this.swap(playlists[i].items, index, index +1);
+            }
+
+            updatedPlaylists.push(playlists[i]);
         }
 
         this.setPlaylist(updatedPlaylists);
@@ -126,7 +178,16 @@ export class Playlist {
         }
     }
 
-    private setPlaylist(list : IPlaylist[]): void {
+    private swap(input: any[], indexA: number, indexB: number): any[] {
+        let temp = input[indexA];
+
+        input[indexA] = input[indexB];
+        input[indexB] = temp;
+
+        return input;
+    }
+
+    private setPlaylist(list: IPlaylist[]): void {
         fs.writeFileSync(this.filePath, Hash.encode(JSON.stringify(list), "ap2"));
     }
 }

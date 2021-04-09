@@ -1,0 +1,77 @@
+@page {
+    margin-bottom: 5pt;
+    margin-top: 5pt
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #ffffff0d;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+button {
+    font-size: 15px;
+    padding: 5px 25px;
+    margin: 0;
+    height: 36px;
+    background-color: #92b4f2;
+    border: none;
+    outline: none;
+    border-radius: 15px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background-color: #3676e8;
+}
+
+button:active {
+    background-color: #dadada;
+    transition: 0s;
+}
+
+.block_ {
+    display: block;
+    font-family: "Calibri Light", sans-serif;
+    font-size: 2em;
+    letter-spacing: -0.5pt;
+    line-height: 1.2;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0
+}
+
+.block_2 {
+    display: block;
+    line-height: 1.2;
+    margin: 0 0 8pt;
+    padding: 0;
+}
+.calibre {
+    display: block;
+    font-family: "Arial", sans-serif;
+    font-size: 1em;
+    margin: 0 5pt;
+    padding-left: 0;
+    padding-right: 0
+}
+.calibre1 {
+    line-height: 1.2;
+    white-space: pre-wrap
+}

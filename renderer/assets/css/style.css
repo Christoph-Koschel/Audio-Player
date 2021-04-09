@@ -488,6 +488,9 @@ body {
     cursor: default;
     text-align: center;
     width: 200px;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
 }
 
 .navbar > .title > span {
@@ -583,4 +586,21 @@ body {
 
 #youtube > div > input:focus {
     outline: none;
+}
+
+#terms {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #ffffff7d;
+}
+
+#terms > iframe {
+    margin: 50px;
+    background-color: white;
+    width: calc(100% - 100px);
+    height: calc(100% - 100px);
 }

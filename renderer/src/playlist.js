@@ -77,6 +77,22 @@ var Playlist = (function () {
         }
         this.setPlaylist(playlists);
     };
+    Playlist.prototype.removeItem = function (name, index) {
+        var playlists = this.getPlaylists();
+        for (var i = 0; i < playlists.length; i++) {
+            if (playlists[i].name === name) {
+                var updatedItems = [];
+                for (var k = 0; k < playlists[i].items.length; k++) {
+                    if (k !== index) {
+                        updatedItems.push(playlists[i].items[k]);
+                    }
+                }
+                playlists[i].items = updatedItems;
+                break;
+            }
+        }
+        this.setPlaylist(playlists);
+    };
     Playlist.prototype.deleteByName = function (name) {
         var playlists = this.getPlaylists();
         var updatedPlaylists = [];
@@ -84,6 +100,30 @@ var Playlist = (function () {
             if (playlists[i].name !== name) {
                 updatedPlaylists.push(playlists[i]);
             }
+        }
+        this.setPlaylist(updatedPlaylists);
+    };
+    Playlist.prototype.moveUp = function (name, index) {
+        var playlists = this.getPlaylists();
+        var updatedPlaylists = [];
+        for (var i = 0; i < playlists.length; i++) {
+            if (playlists[i].name === name) {
+                console.log(index);
+                playlists[i].items = this.swap(playlists[i].items, index, index - 1);
+            }
+            updatedPlaylists.push(playlists[i]);
+        }
+        this.setPlaylist(updatedPlaylists);
+    };
+    Playlist.prototype.moveDown = function (name, index) {
+        var playlists = this.getPlaylists();
+        var updatedPlaylists = [];
+        for (var i = 0; i < playlists.length; i++) {
+            if (playlists[i].name === name) {
+                console.log(index);
+                playlists[i].items = this.swap(playlists[i].items, index, index + 1);
+            }
+            updatedPlaylists.push(playlists[i]);
         }
         this.setPlaylist(updatedPlaylists);
     };
@@ -108,6 +148,12 @@ var Playlist = (function () {
                 throw "Error on Playlist File";
             }
         }
+    };
+    Playlist.prototype.swap = function (input, indexA, indexB) {
+        var temp = input[indexA];
+        input[indexA] = input[indexB];
+        input[indexB] = temp;
+        return input;
     };
     Playlist.prototype.setPlaylist = function (list) {
         fs.writeFileSync(this.filePath, Hash.encode(JSON.stringify(list), "ap2"));

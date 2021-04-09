@@ -22,6 +22,12 @@ export namespace Index {
                 document.getElementById("customPlaylist")?.setAttribute("playlistName", playlist.name);
                 view.loadCostumePlaylist(playlist);
             });
+
+            if (localStorage.getItem("terms") !== "1") {
+                // @ts-ignore
+                document.getElementById("terms").style.display = "block";
+            }
+
             console.log(params.get("path"));
 
             document.getElementById("winClose")?.addEventListener("click", () => {
@@ -38,6 +44,14 @@ export namespace Index {
                 } else {
                     remote.getCurrentWindow().maximize();
                 }
+            });
+
+            // @ts-ignore
+            document.getElementById("termsView").contentWindow.document.getElementById("sub")?.addEventListener("click",() => {
+                localStorage.setItem("terms", "1");
+
+                // @ts-ignore
+                document.getElementById("terms").style.display = "none";
             });
 
             // @ts-ignore
@@ -449,18 +463,20 @@ export namespace Index {
             });
         }
 
-        public loadCostumePlaylist(playlist: IPlaylist) {
+        public loadCostumePlaylist(playlistObj: IPlaylist) {
             // @ts-ignore
             let table: HTMLElement = document.getElementById("customPlaylistTable");
-            document.getElementById("playlistName")?.setAttribute("playlistName", playlist.name);
+            document.getElementById("playlistName")?.setAttribute("playlistName", playlistObj.name);
             table.innerHTML = "";
-            let list: string[] = playlist.items;
+            let list: string[] = playlistObj.items;
 
             list.forEach((value, index, array) => {
                 let tr: HTMLTableRowElement = document.createElement("tr");
+
                 let td1: HTMLTableCellElement = document.createElement("td");
                 td1.innerHTML = (index + 1).toString();
                 td1.style.width = "30px";
+
                 let td2: HTMLTableCellElement = document.createElement("td");
                 if (this.isUrl(value)) {
                     td2.innerHTML = value;
@@ -468,8 +484,51 @@ export namespace Index {
                     td2.innerHTML = path.basename(value);
                 }
 
+                let td3: HTMLTableCellElement = document.createElement("td");
+
+                let upBTN: HTMLButtonElement = document.createElement("button");
+                upBTN.innerHTML = "<i class=\"fas fa-caret-up\"></i>";
+                upBTN.addEventListener("click", () => {
+                    playlist.moveUp(playlistObj.name, index);
+                    // @ts-ignore
+                    this.loadCostumePlaylist(playlist.getPlaylistByName(playlistObj.name));
+                });
+
+                let td4: HTMLTableCellElement = document.createElement("td");
+
+                let downBTN: HTMLButtonElement = document.createElement("button");
+                downBTN.innerHTML = "<i class=\"fas fa-caret-down\"></i>";
+                downBTN.addEventListener("click", () => {
+                    playlist.moveDown(playlistObj.name, index);
+                    // @ts-ignore
+                    this.loadCostumePlaylist(playlist.getPlaylistByName(playlistObj.name));
+                });
+
+                let td5: HTMLTableCellElement = document.createElement("td");
+
+                let deleteBTN: HTMLButtonElement = document.createElement("button");
+                deleteBTN.innerHTML = "<i class=\"fal fa-trash\"></i>";
+                deleteBTN.addEventListener("click", () => {
+                    playlist.removeItem(playlistObj.name, index);
+                    // @ts-ignore
+                    this.loadCostumePlaylist(playlist.getPlaylistByName(playlistObj.name));
+                });
+
+                if (index !== 0) {
+                    td3.appendChild(upBTN);
+                }
+
+                if (index !== list.length -1) {
+                    td4.appendChild(downBTN);
+                }
+
+                td5.appendChild(deleteBTN);
+
                 tr.appendChild(td1);
                 tr.appendChild(td2);
+                tr.appendChild(td3);
+                tr.appendChild(td4);
+                tr.appendChild(td5);
 
                 table.appendChild(tr);
             });

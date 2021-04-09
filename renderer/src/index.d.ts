@@ -16,7 +16,7 @@ export declare namespace Index {
         private load;
         getCurrentView(): "home" | "youtube" | "playlist" | "costumePlaylist";
         loadPlaylist(list: string[]): void;
-        loadCostumePlaylist(playlist: IPlaylist): void;
+        loadCostumePlaylist(playlistObj: IPlaylist): void;
         private loadHomeCards;
         private isUrl;
     }

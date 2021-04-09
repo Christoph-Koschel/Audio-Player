@@ -7,6 +7,7 @@ var fs = require("fs");
 electron_1.app.on("ready", function () {
     electron_updater_1.autoUpdater.checkForUpdatesAndNotify();
     var win = new electron_1.BrowserWindow({
+        transparent: true,
         title: "Sirent",
         frame: false,
         icon: path.join(__dirname, "res", "icon", "icon.png"),

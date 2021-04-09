@@ -7,8 +7,9 @@ app.on("ready",() => {
     autoUpdater.checkForUpdatesAndNotify();
 
     const win: BrowserWindow = new BrowserWindow({
+        transparent: true,
         title: "Sirent",
-        frame: false, // TODO Change this to false
+        frame: false,
         icon: path.join(__dirname, "res", "icon", "icon.png"),
         minWidth: 1100,
         webPreferences: {
