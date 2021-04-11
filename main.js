@@ -6,7 +6,10 @@ var electron_updater_1 = require("electron-updater");
 var fs = require("fs");
 var mime = require("mime");
 electron_1.app.on("ready", function () {
-    electron_updater_1.autoUpdater.checkForUpdatesAndNotify();
+    electron_updater_1.autoUpdater.on("update-downloaded", function () {
+        electron_updater_1.autoUpdater.quitAndInstall();
+    });
+    electron_updater_1.autoUpdater.checkForUpdates();
     var win = new electron_1.BrowserWindow({
         transparent: true,
         title: "Sirent",

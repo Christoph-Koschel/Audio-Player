@@ -6,10 +6,13 @@ import * as fs from "fs";
 const mime = require("mime");
 
 app.on("ready",() => {
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.on("update-downloaded", () => {
+        autoUpdater.quitAndInstall();
+    })
+
+    autoUpdater.checkForUpdates();
 
     const win: BrowserWindow = new BrowserWindow({
-        transparent: true,
         title: "Sirent",
         frame: false,
         icon: path.join(__dirname, "res", "icon", "icon.png"),
@@ -38,7 +41,9 @@ app.on("ready",() => {
     });
 
     win.on("closed", () => {
-        fs.unlinkSync(path.join(app.getPath("temp"), "ap2.tmp"));
+        if (fs.existsSync(path.join(app.getPath("temp"), "ap2.tmp"))) {
+            fs.unlinkSync(path.join(app.getPath("temp"), "ap2.tmp"));
+        }
         app.quit();
     });
 });
