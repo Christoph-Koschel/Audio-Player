@@ -5,6 +5,7 @@ import * as ytpl from "ytpl";
 import {Player} from "./player";
 import {IPlaylist, Playlist} from "./playlist";
 import {LocalStorage} from "./localStorage";
+import {Animation} from "./animation";
 
 const mime = require("mime");
 
@@ -12,6 +13,7 @@ export namespace Index {
     const app: Electron.App = remote.app;
     const dialog: Electron.Dialog = remote.dialog;
     const player: Player = new Player();
+    const animation: Animation = new Animation(<HTMLElement>document.getElementById("animationCanvas"), player);
     const playlist: Playlist = new Playlist(path.join(app.getPath("userData"), "playlist"));
     const localStorage: LocalStorage = new LocalStorage();
     export class Main {
@@ -69,6 +71,10 @@ export namespace Index {
 
                 // @ts-ignore
                 document.getElementById("terms").style.display = "none";
+            });
+
+            document.getElementById("animationBtn")?.addEventListener("click", () => {
+                view.changeView("animation");
             });
 
             // @ts-ignore
@@ -369,7 +375,7 @@ export namespace Index {
 
         private reloadStyles(): void {
             // @ts-ignore
-            document.getElementsByClassName("playlistList")[0].style.height = (window.innerHeight - 261).toString() + "px";
+            document.getElementsByClassName("playlistList")[0].style.height = (window.innerHeight - 298).toString() + "px";
 
             // @ts-ignore
             document.getElementsByClassName("playlistWrapper")[0].style.height = (window.innerHeight - 200).toString() + "px";
@@ -383,27 +389,27 @@ export namespace Index {
         private youtube: HTMLElement;
         private playlist: HTMLElement;
         private costumePlaylist: HTMLElement;
-        private currentView: "home" | "youtube" | "playlist" | "costumePlaylist" = "home";
+        private animation: HTMLElement;
+        private currentView: "home" | "youtube" | "playlist" | "costumePlaylist" | "animation" = "home";
 
         constructor() {
-            // @ts-ignore
-            this.home = document.getElementById("home");
-            // @ts-ignore
-            this.youtube = document.getElementById("youtube");
-            // @ts-ignore
-            this.playlist = document.getElementById("playlist");
-            // @ts-ignore
-            this.costumePlaylist = document.getElementById("customPlaylist");
+            this.home = <HTMLElement>document.getElementById("home");
+            this.youtube = <HTMLElement>document.getElementById("youtube");
+            this.playlist = <HTMLElement>document.getElementById("playlist");
+            this.costumePlaylist = <HTMLElement>document.getElementById("customPlaylist");
+            this.animation = <HTMLElement>document.getElementById("animation");
         }
 
-        public changeView(view: "home" | "youtube" | "playlist" | "costumePlaylist"): void {
+        public changeView(view: "home" | "youtube" | "playlist" | "costumePlaylist" | "animation"): void {
             document.getElementById("homeBtn")?.classList.remove("active");
             document.getElementById("youtubeBtn")?.classList.remove("active");
+            document.getElementById("animationBtn")?.classList.remove("active");
 
             this.home.style.display = "none";
             this.youtube.style.display = "none";
             this.playlist.style.display = "none";
             this.costumePlaylist.style.display = "none";
+            this.animation.style.display = "none";
             this.currentView = view;
             localStorage.setItem("view", view);
 
@@ -428,9 +434,15 @@ export namespace Index {
                 this.load("costumePlaylist");
                 this.costumePlaylist.style.display = "";
             }
+
+            if (view == "animation") {
+                this.load("animation");
+                this.animation.style.display = "";
+                document.getElementById("animationBtn")?.classList.add("active");
+            }
         }
 
-        private load(view: "home" | "youtube" | "playlist" | "costumePlaylist"): void {
+        private load(view: "home" | "youtube" | "playlist" | "costumePlaylist" | "animation"): void {
             switch (view) {
                 case "home":
                     this.loadHomeCards();
@@ -442,10 +454,13 @@ export namespace Index {
                     break;
                 case "costumePlaylist":
                     break;
+                case "animation":
+                    animation.start();
+                    break;
             }
         }
 
-        public getCurrentView(): "home" | "youtube" | "playlist" | "costumePlaylist" {
+        public getCurrentView(): "home" | "youtube" | "playlist" | "costumePlaylist" | "animation" {
             return this.currentView;
         }
 

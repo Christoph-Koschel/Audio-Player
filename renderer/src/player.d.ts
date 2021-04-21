@@ -27,6 +27,7 @@ export declare class Player {
     getPlayIndex(): number;
     getLastInformation(): string;
     unLoad(): void;
+    getFrequencyBuffer(): Uint8Array;
     private isUrl;
     private clearInformation;
     private emit;

@@ -11,7 +11,6 @@ electron_1.app.on("ready", function () {
     });
     electron_updater_1.autoUpdater.checkForUpdates();
     var win = new electron_1.BrowserWindow({
-        transparent: true,
         title: "Sirent",
         frame: false,
         icon: path.join(__dirname, "res", "icon", "icon.png"),
@@ -32,9 +31,16 @@ electron_1.app.on("ready", function () {
     win.loadFile(path.join(__dirname, "renderer", "index.html"), {
         search: "path=" + JSON.stringify(args)
     }).then(function () {
+        if (process.argv.indexOf("dev") != -1) {
+            win.webContents.openDevTools({
+                mode: "undocked"
+            });
+        }
     });
     win.on("closed", function () {
-        fs.unlinkSync(path.join(electron_1.app.getPath("temp"), "ap2.tmp"));
+        if (fs.existsSync(path.join(electron_1.app.getPath("temp"), "ap2.tmp"))) {
+            fs.unlinkSync(path.join(electron_1.app.getPath("temp"), "ap2.tmp"));
+        }
         electron_1.app.quit();
     });
 });

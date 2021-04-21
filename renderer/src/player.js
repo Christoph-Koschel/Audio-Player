@@ -132,6 +132,14 @@ var Player = (function () {
         this.player.pause();
         this.emit("timeChange");
     };
+    Player.prototype.getFrequencyBuffer = function () {
+        var context = new AudioContext();
+        var analyser = context.createAnalyser();
+        var source = context.createMediaElementSource(this.player);
+        source.connect(analyser);
+        analyser.connect(context.destination);
+        return new Uint8Array(analyser.frequencyBinCount);
+    };
     Player.prototype.isUrl = function (str) {
         var pattern = new RegExp('^(https?:\\/\\/)?' +
             '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +

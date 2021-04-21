@@ -166,6 +166,15 @@ export class Player {
         this.emit("timeChange");
     }
 
+    public getFrequencyBuffer(): Uint8Array {
+        let context: AudioContext = new AudioContext();
+        let analyser: AnalyserNode = context.createAnalyser();
+        let source: MediaElementAudioSourceNode =context.createMediaElementSource(this.player);
+        source.connect(analyser);
+        analyser.connect(context.destination);
+        return new Uint8Array(analyser.frequencyBinCount);
+    }
+
     private isUrl(str: string): boolean {
         let pattern = new RegExp('^(https?:\\/\\/)?' +
             '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +

@@ -3,3 +3,4 @@ node_modules
 dist
 .idea
 README.md
+electron-builder.json

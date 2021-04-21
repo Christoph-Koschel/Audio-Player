@@ -35,9 +35,11 @@ app.on("ready",() => {
     win.loadFile(path.join(__dirname, "renderer", "index.html"),{
         search: "path=" + JSON.stringify(args)
     }).then(() => {
-        // win.webContents.openDevTools({
-        //     mode: "undocked"
-        // });
+        if (process.argv.indexOf("dev") != -1) {
+            win.webContents.openDevTools({
+                mode: "undocked"
+            });
+        }
     });
 
     win.on("closed", () => {
