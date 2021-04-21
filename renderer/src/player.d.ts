@@ -6,6 +6,8 @@ export declare class Player {
     private loop;
     private information;
     private volume;
+    private analyser;
+    private frequency;
     constructor();
     playIndexUp(): void;
     playIndexDown(): void;
@@ -27,7 +29,7 @@ export declare class Player {
     getPlayIndex(): number;
     getLastInformation(): string;
     unLoad(): void;
-    getFrequencyBuffer(): Uint8Array;
+    getFrequency(): Uint8Array;
     private isUrl;
     private clearInformation;
     private emit;

@@ -14,6 +14,8 @@ export class Player {
     private loop: boolean;
     private information: string = "";
     private volume: number = 0.5;
+    private analyser: AnalyserNode;
+    private frequency: Uint8Array;
 
     constructor() {
         this.playIndex = 0;
@@ -21,6 +23,13 @@ export class Player {
         this.player = new Audio();
         this.eventList = {};
         this.loop = false;
+
+        let context: AudioContext = new AudioContext();
+        this.analyser = context.createAnalyser();
+        let source: MediaElementAudioSourceNode =context.createMediaElementSource(this.player);
+        source.connect(this.analyser);
+        this.analyser.connect(context.destination);
+        this.frequency = new Uint8Array(this.analyser.frequencyBinCount);
 
         this.player.volume = this.volume;
 
@@ -166,13 +175,9 @@ export class Player {
         this.emit("timeChange");
     }
 
-    public getFrequencyBuffer(): Uint8Array {
-        let context: AudioContext = new AudioContext();
-        let analyser: AnalyserNode = context.createAnalyser();
-        let source: MediaElementAudioSourceNode =context.createMediaElementSource(this.player);
-        source.connect(analyser);
-        analyser.connect(context.destination);
-        return new Uint8Array(analyser.frequencyBinCount);
+    public getFrequency(): Uint8Array {
+        this.analyser.getByteFrequencyData(this.frequency);
+        return this.frequency;
     }
 
     private isUrl(str: string): boolean {
@@ -199,25 +204,30 @@ export class Player {
     }
 
     private load(play: boolean): void {
-        this.player.pause();
-        if (this.isUrl(this.playlist[this.playIndex])) {
-            this.information = "Download Music";
-            this.emit("information");
-            this.loadYoutubeVideo(() => {
-                this.clearInformation();
-                this.player.src = path.join(app.getPath("temp"), "ap2.tmp") + "?d" + Date.now().toString();
-                this.player.load();
-                if (play) {
-                    this.player.play();
-                }
-            });
-            return;
-        } else {
-            this.player.src = this.playlist[this.playIndex];
-        }
-        this.player.load();
-        if (play) {
-            this.player.play();
+        try {
+            this.player.pause();
+            if (this.isUrl(this.playlist[this.playIndex])) {
+                this.information = "Download Music";
+                this.emit("information");
+                this.loadYoutubeVideo(() => {
+                    this.clearInformation();
+                    this.player.src = path.join(app.getPath("temp"), "ap2.tmp") + "?d" + Date.now().toString();
+                    this.player.load();
+                    if (play) {
+                        this.player.play();
+                    }
+                });
+                return;
+            } else {
+                this.player.src = this.playlist[this.playIndex];
+            }
+            this.player.load();
+            if (play) {
+                this.player.play();
+            }
+        } catch {
+            this.playIndexUp();
+            this.load(true);
         }
     }
 

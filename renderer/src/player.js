@@ -17,6 +17,12 @@ var Player = (function () {
         this.player = new Audio();
         this.eventList = {};
         this.loop = false;
+        var context = new AudioContext();
+        this.analyser = context.createAnalyser();
+        var source = context.createMediaElementSource(this.player);
+        source.connect(this.analyser);
+        this.analyser.connect(context.destination);
+        this.frequency = new Uint8Array(this.analyser.frequencyBinCount);
         this.player.volume = this.volume;
         this.player.addEventListener("timeupdate", function () {
             _this.emit("timeChange");
@@ -132,13 +138,9 @@ var Player = (function () {
         this.player.pause();
         this.emit("timeChange");
     };
-    Player.prototype.getFrequencyBuffer = function () {
-        var context = new AudioContext();
-        var analyser = context.createAnalyser();
-        var source = context.createMediaElementSource(this.player);
-        source.connect(analyser);
-        analyser.connect(context.destination);
-        return new Uint8Array(analyser.frequencyBinCount);
+    Player.prototype.getFrequency = function () {
+        this.analyser.getByteFrequencyData(this.frequency);
+        return this.frequency;
     };
     Player.prototype.isUrl = function (str) {
         var pattern = new RegExp('^(https?:\\/\\/)?' +
@@ -163,26 +165,32 @@ var Player = (function () {
     };
     Player.prototype.load = function (play) {
         var _this = this;
-        this.player.pause();
-        if (this.isUrl(this.playlist[this.playIndex])) {
-            this.information = "Download Music";
-            this.emit("information");
-            this.loadYoutubeVideo(function () {
-                _this.clearInformation();
-                _this.player.src = path.join(app.getPath("temp"), "ap2.tmp") + "?d" + Date.now().toString();
-                _this.player.load();
-                if (play) {
-                    _this.player.play();
-                }
-            });
-            return;
+        try {
+            this.player.pause();
+            if (this.isUrl(this.playlist[this.playIndex])) {
+                this.information = "Download Music";
+                this.emit("information");
+                this.loadYoutubeVideo(function () {
+                    _this.clearInformation();
+                    _this.player.src = path.join(app.getPath("temp"), "ap2.tmp") + "?d" + Date.now().toString();
+                    _this.player.load();
+                    if (play) {
+                        _this.player.play();
+                    }
+                });
+                return;
+            }
+            else {
+                this.player.src = this.playlist[this.playIndex];
+            }
+            this.player.load();
+            if (play) {
+                this.player.play();
+            }
         }
-        else {
-            this.player.src = this.playlist[this.playIndex];
-        }
-        this.player.load();
-        if (play) {
-            this.player.play();
+        catch (_a) {
+            this.playIndexUp();
+            this.load(true);
         }
     };
     Player.prototype.loadYoutubeVideo = function (callback) {

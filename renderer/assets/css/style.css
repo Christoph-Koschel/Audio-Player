@@ -604,3 +604,7 @@ body {
     width: calc(100% - 100px);
     height: calc(100% - 100px);
 }
+
+#animation > #animationCanvas {
+    border-radius: 15px;
+}

@@ -15,7 +15,7 @@ var Index;
     var app = electron_1.remote.app;
     var dialog = electron_1.remote.dialog;
     var player = new player_1.Player();
-    var animation = new animation_1.Animation(document.getElementById("animationCanvas"), player);
+    var animation;
     var playlist = new playlist_1.Playlist(path.join(app.getPath("userData"), "playlist"));
     var localStorage = new localStorage_1.LocalStorage();
     var Main = (function () {
@@ -303,12 +303,16 @@ var Index;
             });
         }
         Main.main = function () {
+            animation = new animation_1.Animation("animationCanvas", player);
             new Main();
         };
         Main.prototype.reloadStyles = function () {
             document.getElementsByClassName("playlistList")[0].style.height = (window.innerHeight - 298).toString() + "px";
             document.getElementsByClassName("playlistWrapper")[0].style.height = (window.innerHeight - 200).toString() + "px";
             document.getElementsByClassName("playlistWrapper")[1].style.height = (window.innerHeight - 200).toString() + "px";
+            if (animation instanceof animation_1.Animation) {
+                animation.updateSize();
+            }
         };
         return Main;
     }());
@@ -327,6 +331,9 @@ var Index;
             (_a = document.getElementById("homeBtn")) === null || _a === void 0 ? void 0 : _a.classList.remove("active");
             (_b = document.getElementById("youtubeBtn")) === null || _b === void 0 ? void 0 : _b.classList.remove("active");
             (_c = document.getElementById("animationBtn")) === null || _c === void 0 ? void 0 : _c.classList.remove("active");
+            if (animation instanceof animation_1.Animation) {
+                animation.stop();
+            }
             this.home.style.display = "none";
             this.youtube.style.display = "none";
             this.playlist.style.display = "none";
@@ -371,7 +378,9 @@ var Index;
                 case "costumePlaylist":
                     break;
                 case "animation":
-                    animation.start();
+                    if (animation instanceof animation_1.Animation) {
+                        animation.start();
+                    }
                     break;
             }
         };

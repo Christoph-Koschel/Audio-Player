@@ -13,10 +13,12 @@ export namespace Index {
     const app: Electron.App = remote.app;
     const dialog: Electron.Dialog = remote.dialog;
     const player: Player = new Player();
-    const animation: Animation = new Animation(<HTMLElement>document.getElementById("animationCanvas"), player);
+    let animation: Animation | undefined;
     const playlist: Playlist = new Playlist(path.join(app.getPath("userData"), "playlist"));
     const localStorage: LocalStorage = new LocalStorage();
+
     export class Main {
+
         public constructor() {
             let params: URLSearchParams = new URLSearchParams(window.location.search);
             const view: Views = new Views();
@@ -370,6 +372,7 @@ export namespace Index {
         }
 
         public static main(): void {
+            animation = new Animation("animationCanvas", player);
             new Main();
         }
 
@@ -381,6 +384,10 @@ export namespace Index {
             document.getElementsByClassName("playlistWrapper")[0].style.height = (window.innerHeight - 200).toString() + "px";
             // @ts-ignore
             document.getElementsByClassName("playlistWrapper")[1].style.height = (window.innerHeight - 200).toString() + "px";
+
+            if (animation instanceof Animation) {
+                animation.updateSize();
+            }
         }
     }
 
@@ -404,6 +411,10 @@ export namespace Index {
             document.getElementById("homeBtn")?.classList.remove("active");
             document.getElementById("youtubeBtn")?.classList.remove("active");
             document.getElementById("animationBtn")?.classList.remove("active");
+
+            if (animation instanceof Animation) {
+                animation.stop();
+            }
 
             this.home.style.display = "none";
             this.youtube.style.display = "none";
@@ -455,7 +466,9 @@ export namespace Index {
                 case "costumePlaylist":
                     break;
                 case "animation":
-                    animation.start();
+                    if (animation instanceof Animation) {
+                        animation.start();
+                    }
                     break;
             }
         }
