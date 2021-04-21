@@ -1,6 +1,6 @@
 electron-builder.yml
+electron-builder.json
 node_modules
 dist
 .idea
 README.md
-electron-builder.json
