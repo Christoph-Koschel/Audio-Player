@@ -1,16 +1,12 @@
 import {BrowserWindow, app, globalShortcut} from "electron";
 import * as path from "path";
-import {autoUpdater} from "electron-updater";
 import * as fs from "fs";
+import {update} from "./updater";
 
 const mime = require("mime");
 
 app.on("ready",() => {
-    autoUpdater.on("update-downloaded", () => {
-        autoUpdater.quitAndInstall();
-    });
-
-    autoUpdater.checkForUpdates();
+    update(app.getPath("temp"));
 
     const win: BrowserWindow = new BrowserWindow({
         title: "Sirent",
