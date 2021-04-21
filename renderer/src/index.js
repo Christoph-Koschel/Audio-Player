@@ -8,17 +8,21 @@ var ytpl = require("ytpl");
 var player_1 = require("./player");
 var playlist_1 = require("./playlist");
 var localStorage_1 = require("./localStorage");
+var animation_1 = require("./animation");
 var mime = require("mime");
 var Index;
 (function (Index) {
     var app = electron_1.remote.app;
     var dialog = electron_1.remote.dialog;
     var player = new player_1.Player();
+    var animation;
+    var openSiteMenu = true;
     var playlist = new playlist_1.Playlist(path.join(app.getPath("userData"), "playlist"));
     var localStorage = new localStorage_1.LocalStorage();
     var Main = (function () {
         function Main() {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0;
+            var _this = this;
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2;
             var params = new URLSearchParams(window.location.search);
             var view = new Views();
             playlist.build("list", document.getElementsByClassName("playlistList")[0], function (playlist) {
@@ -36,11 +40,16 @@ var Index;
             if (!localStorage.hasItem("volume")) {
                 localStorage.setItem("volume", "0.5");
             }
+            if (!localStorage.hasItem("openSiteMenu")) {
+                localStorage.setItem("openSiteMenu", "true");
+            }
             if (JSON.parse(params.get("path")).length !== 0) {
                 player.setPlaylist(JSON.parse(params.get("path")));
                 player.setIndex(0);
                 player.play();
             }
+            openSiteMenu = (localStorage.getItem("openSiteMenu") !== "true");
+            this.setSideMenu(false);
             player.setVolume(parseFloat(localStorage.getItem("volume")));
             document.getElementById("volumeControl").value = parseFloat(localStorage.getItem("volume")) * 100;
             (_a = document.getElementById("winClose")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
@@ -61,14 +70,17 @@ var Index;
                 localStorage.setItem("terms", "1");
                 document.getElementById("terms").style.display = "none";
             });
-            (_e = document.getElementById("version")) === null || _e === void 0 ? void 0 : _e.innerHTML = "Sirent v" + app.getVersion();
-            (_f = document.getElementById("homeBtn")) === null || _f === void 0 ? void 0 : _f.addEventListener("click", function () {
+            (_e = document.getElementById("animationBtn")) === null || _e === void 0 ? void 0 : _e.addEventListener("click", function () {
+                view.changeView("animation");
+            });
+            (_f = document.getElementById("version")) === null || _f === void 0 ? void 0 : _f.innerHTML = "Sirent v" + app.getVersion();
+            (_g = document.getElementById("homeBtn")) === null || _g === void 0 ? void 0 : _g.addEventListener("click", function () {
                 view.changeView("home");
             });
-            (_g = document.getElementById("youtubeBtn")) === null || _g === void 0 ? void 0 : _g.addEventListener("click", function () {
+            (_h = document.getElementById("youtubeBtn")) === null || _h === void 0 ? void 0 : _h.addEventListener("click", function () {
                 view.changeView("youtube");
             });
-            (_h = document.getElementById("playBTN")) === null || _h === void 0 ? void 0 : _h.addEventListener("click", function () {
+            (_j = document.getElementById("playBTN")) === null || _j === void 0 ? void 0 : _j.addEventListener("click", function () {
                 if (player.isPlaying()) {
                     player.pause();
                 }
@@ -76,20 +88,20 @@ var Index;
                     player.resume();
                 }
             });
-            (_j = document.getElementById("playForward")) === null || _j === void 0 ? void 0 : _j.addEventListener("click", function () {
+            (_k = document.getElementById("playForward")) === null || _k === void 0 ? void 0 : _k.addEventListener("click", function () {
                 player.playIndexUp();
                 view.loadPlaylist(player.getPlaylist());
             });
-            (_k = document.getElementById("playBackward")) === null || _k === void 0 ? void 0 : _k.addEventListener("click", function () {
+            (_l = document.getElementById("playBackward")) === null || _l === void 0 ? void 0 : _l.addEventListener("click", function () {
                 player.playIndexDown();
                 view.loadPlaylist(player.getPlaylist());
             });
-            (_l = document.getElementById("volumeControl")) === null || _l === void 0 ? void 0 : _l.addEventListener("click", function () {
+            (_m = document.getElementById("volumeControl")) === null || _m === void 0 ? void 0 : _m.addEventListener("click", function () {
                 var value = document.getElementById("volumeControl").value;
                 localStorage.setItem("volume", (parseInt(value) / 100).toString());
                 player.setVolume((parseInt(value) / 100));
             });
-            (_m = document.getElementById("playlistAppendBTN")) === null || _m === void 0 ? void 0 : _m.addEventListener("click", function () {
+            (_o = document.getElementById("playlistAppendBTN")) === null || _o === void 0 ? void 0 : _o.addEventListener("click", function () {
                 var selectedFiles = dialog.showOpenDialogSync({
                     properties: ["openFile", "multiSelections"],
                     filters: [
@@ -110,12 +122,12 @@ var Index;
                 });
                 view.loadPlaylist(player.getPlaylist());
             });
-            (_o = document.getElementById("playlistAppendLinkBTN")) === null || _o === void 0 ? void 0 : _o.addEventListener("click", function () {
+            (_p = document.getElementById("playlistAppendLinkBTN")) === null || _p === void 0 ? void 0 : _p.addEventListener("click", function () {
                 var _a, _b;
                 (_a = document.getElementById("clearer")) === null || _a === void 0 ? void 0 : _a.style.display = "block";
                 (_b = document.getElementById("linkView")) === null || _b === void 0 ? void 0 : _b.style.display = "block";
             });
-            (_p = document.getElementById("linkViewSubmit")) === null || _p === void 0 ? void 0 : _p.addEventListener("click", function () {
+            (_q = document.getElementById("linkViewSubmit")) === null || _q === void 0 ? void 0 : _q.addEventListener("click", function () {
                 var _a, _b, _c;
                 var url = document.getElementById("linkViewInput").value;
                 document.getElementById("linkViewInput").value = "";
@@ -138,12 +150,12 @@ var Index;
                     view.loadPlaylist(player.getPlaylist());
                 }
             });
-            (_q = document.getElementById("linkViewCancel")) === null || _q === void 0 ? void 0 : _q.addEventListener("click", function () {
+            (_r = document.getElementById("linkViewCancel")) === null || _r === void 0 ? void 0 : _r.addEventListener("click", function () {
                 var _a, _b;
                 (_a = document.getElementById("linkView")) === null || _a === void 0 ? void 0 : _a.style.display = "none";
                 (_b = document.getElementById("clearer")) === null || _b === void 0 ? void 0 : _b.style.display = "none";
             });
-            (_r = document.getElementById("playlistClearBTN")) === null || _r === void 0 ? void 0 : _r.addEventListener("click", function () {
+            (_s = document.getElementById("playlistClearBTN")) === null || _s === void 0 ? void 0 : _s.addEventListener("click", function () {
                 var _a;
                 if (player.isPlaying()) {
                     player.pause();
@@ -153,7 +165,7 @@ var Index;
                 (_a = document.getElementById("barFill")) === null || _a === void 0 ? void 0 : _a.style.width = "0%";
                 view.loadPlaylist(player.getPlaylist());
             });
-            (_s = document.getElementById("loadPlaylistURLSubmit")) === null || _s === void 0 ? void 0 : _s.addEventListener("click", function () {
+            (_t = document.getElementById("loadPlaylistURLSubmit")) === null || _t === void 0 ? void 0 : _t.addEventListener("click", function () {
                 ytpl.getPlaylistID(document.getElementById("loadPlaylistURL").value).then(function (id) {
                     ytpl(id).then(function (playlist) {
                         var list = [];
@@ -167,20 +179,31 @@ var Index;
                     });
                 });
             });
-            (_t = document.getElementById("loadVideoURLSubmit")) === null || _t === void 0 ? void 0 : _t.addEventListener("click", function () {
-                if (document.getElementById("loadPlaylistURL").value !== "") {
-                    player.setPlaylist([document.getElementById("loadPlaylistURL").value]);
+            (_u = document.getElementById("loadVideoURLSubmit")) === null || _u === void 0 ? void 0 : _u.addEventListener("click", function () {
+                if (document.getElementById("loadVideoURL").value !== "") {
+                    player.setPlaylist([document.getElementById("loadVideoURL").value]);
                     player.setIndex(0);
                     player.play();
-                    document.getElementById("loadPlaylistURL").value = "";
+                    document.getElementById("loadVideoURL").value = "";
                 }
             });
-            (_u = document.getElementsByClassName("addPlaylistButton")[0]) === null || _u === void 0 ? void 0 : _u.addEventListener("click", function () {
+            (_v = document.getElementsByClassName("addPlaylistButton")[0]) === null || _v === void 0 ? void 0 : _v.addEventListener("click", function () {
                 var _a, _b;
                 (_a = document.getElementById("clearer")) === null || _a === void 0 ? void 0 : _a.style.display = "block";
                 (_b = document.getElementById("playlistView")) === null || _b === void 0 ? void 0 : _b.style.display = "block";
             });
-            (_v = document.getElementById("playlistViewSubmit")) === null || _v === void 0 ? void 0 : _v.addEventListener("click", function () {
+            window.addEventListener("mousemove", function () {
+                if (_this.mouseInterval) {
+                    clearTimeout(_this.mouseInterval);
+                }
+                document.getElementById("minimizeDot").style.display = "";
+                document.body.style.cursor = "";
+                _this.mouseInterval = setTimeout(function () {
+                    document.getElementById("minimizeDot").style.display = "none";
+                    document.body.style.cursor = "none";
+                }, 20 * 1000);
+            });
+            (_w = document.getElementById("playlistViewSubmit")) === null || _w === void 0 ? void 0 : _w.addEventListener("click", function () {
                 var _a, _b;
                 if (document.getElementById("playlistViewInput").value !== "") {
                     playlist.add(document.getElementById("playlistViewInput").value);
@@ -197,12 +220,12 @@ var Index;
                 (_a = document.getElementById("clearer")) === null || _a === void 0 ? void 0 : _a.style.display = "none";
                 (_b = document.getElementById("playlistView")) === null || _b === void 0 ? void 0 : _b.style.display = "none";
             });
-            (_w = document.getElementById("playlistViewCancel")) === null || _w === void 0 ? void 0 : _w.addEventListener("click", function () {
+            (_x = document.getElementById("playlistViewCancel")) === null || _x === void 0 ? void 0 : _x.addEventListener("click", function () {
                 var _a, _b;
                 (_a = document.getElementById("clearer")) === null || _a === void 0 ? void 0 : _a.style.display = "none";
                 (_b = document.getElementById("playlistView")) === null || _b === void 0 ? void 0 : _b.style.display = "none";
             });
-            (_x = document.getElementById("customPlaylistPlayBTN")) === null || _x === void 0 ? void 0 : _x.addEventListener("click", function () {
+            (_y = document.getElementById("customPlaylistPlayBTN")) === null || _y === void 0 ? void 0 : _y.addEventListener("click", function () {
                 var _a;
                 var name = (_a = document.getElementById("customPlaylist")) === null || _a === void 0 ? void 0 : _a.getAttribute("playlistName");
                 if (name === null) {
@@ -221,12 +244,12 @@ var Index;
                     }
                 }
             });
-            (_y = document.getElementById("customPlaylistAppendLinkBTN")) === null || _y === void 0 ? void 0 : _y.addEventListener("click", function () {
+            (_z = document.getElementById("customPlaylistAppendLinkBTN")) === null || _z === void 0 ? void 0 : _z.addEventListener("click", function () {
                 var _a, _b;
                 (_a = document.getElementById("clearer")) === null || _a === void 0 ? void 0 : _a.style.display = "block";
                 (_b = document.getElementById("linkView")) === null || _b === void 0 ? void 0 : _b.style.display = "block";
             });
-            (_z = document.getElementById("customPlaylistAppendBTN")) === null || _z === void 0 ? void 0 : _z.addEventListener("click", function () {
+            (_0 = document.getElementById("customPlaylistAppendBTN")) === null || _0 === void 0 ? void 0 : _0.addEventListener("click", function () {
                 var _a;
                 var name = (_a = document.getElementById("customPlaylist")) === null || _a === void 0 ? void 0 : _a.getAttribute("playlistName");
                 if (!name) {
@@ -254,7 +277,7 @@ var Index;
                     view.loadCostumePlaylist(playlist.getPlaylistByName(name));
                 }
             });
-            (_0 = document.getElementById("customPlaylistDeleteBTN")) === null || _0 === void 0 ? void 0 : _0.addEventListener("click", function () {
+            (_1 = document.getElementById("customPlaylistDeleteBTN")) === null || _1 === void 0 ? void 0 : _1.addEventListener("click", function () {
                 var _a;
                 var name = (_a = document.getElementById("customPlaylist")) === null || _a === void 0 ? void 0 : _a.getAttribute("playlistName");
                 if (!name) {
@@ -270,6 +293,9 @@ var Index;
                     });
                     view.changeView("home");
                 }
+            });
+            (_2 = document.getElementById("minimizeDot")) === null || _2 === void 0 ? void 0 : _2.addEventListener("click", function () {
+                _this.setSideMenu(true);
             });
             window.addEventListener("resize", this.reloadStyles);
             this.reloadStyles();
@@ -298,12 +324,37 @@ var Index;
             });
         }
         Main.main = function () {
+            animation = new animation_1.Animation("animationCanvas", player);
             new Main();
         };
         Main.prototype.reloadStyles = function () {
-            document.getElementsByClassName("playlistList")[0].style.height = (window.innerHeight - 261).toString() + "px";
+            document.getElementsByClassName("playlistList")[0].style.height = (window.innerHeight - 298).toString() + "px";
             document.getElementsByClassName("playlistWrapper")[0].style.height = (window.innerHeight - 200).toString() + "px";
             document.getElementsByClassName("playlistWrapper")[1].style.height = (window.innerHeight - 200).toString() + "px";
+            if (animation instanceof animation_1.Animation) {
+                animation.updateSize(openSiteMenu);
+            }
+        };
+        Main.prototype.setSideMenu = function (setOnLocalStorage) {
+            if (openSiteMenu) {
+                document.getElementsByClassName("siteMenu")[0].style.display = "none";
+                document.getElementsByClassName("body")[0].style.marginLeft = "-200px";
+                document.querySelector(":root").style.setProperty("--dotPoint-left", "3px");
+                if (setOnLocalStorage) {
+                    localStorage.setItem("openSiteMenu", "false");
+                }
+                openSiteMenu = false;
+            }
+            else {
+                document.getElementsByClassName("siteMenu")[0].style.display = "";
+                document.getElementsByClassName("body")[0].style.marginLeft = "";
+                document.querySelector(":root").style.setProperty("--dotPoint-left", "200px");
+                if (setOnLocalStorage) {
+                    localStorage.setItem("openSiteMenu", "true");
+                }
+                openSiteMenu = true;
+            }
+            this.reloadStyles();
         };
         return Main;
     }());
@@ -315,26 +366,32 @@ var Index;
             this.youtube = document.getElementById("youtube");
             this.playlist = document.getElementById("playlist");
             this.costumePlaylist = document.getElementById("customPlaylist");
+            this.animation = document.getElementById("animation");
         }
         Views.prototype.changeView = function (view) {
-            var _a, _b, _c, _d;
+            var _a, _b, _c, _d, _e, _f;
             (_a = document.getElementById("homeBtn")) === null || _a === void 0 ? void 0 : _a.classList.remove("active");
             (_b = document.getElementById("youtubeBtn")) === null || _b === void 0 ? void 0 : _b.classList.remove("active");
+            (_c = document.getElementById("animationBtn")) === null || _c === void 0 ? void 0 : _c.classList.remove("active");
+            if (animation instanceof animation_1.Animation) {
+                animation.stop();
+            }
             this.home.style.display = "none";
             this.youtube.style.display = "none";
             this.playlist.style.display = "none";
             this.costumePlaylist.style.display = "none";
+            this.animation.style.display = "none";
             this.currentView = view;
             localStorage.setItem("view", view);
             if (view === "home") {
                 this.load("home");
                 this.home.style.display = "";
-                (_c = document.getElementById("homeBtn")) === null || _c === void 0 ? void 0 : _c.classList.add("active");
+                (_d = document.getElementById("homeBtn")) === null || _d === void 0 ? void 0 : _d.classList.add("active");
             }
             if (view === "youtube") {
                 this.load("youtube");
                 this.youtube.style.display = "";
-                (_d = document.getElementById("youtubeBtn")) === null || _d === void 0 ? void 0 : _d.classList.add("active");
+                (_e = document.getElementById("youtubeBtn")) === null || _e === void 0 ? void 0 : _e.classList.add("active");
             }
             if (view === "playlist") {
                 this.load("playlist");
@@ -343,6 +400,11 @@ var Index;
             if (view === "costumePlaylist") {
                 this.load("costumePlaylist");
                 this.costumePlaylist.style.display = "";
+            }
+            if (view == "animation") {
+                this.load("animation");
+                this.animation.style.display = "";
+                (_f = document.getElementById("animationBtn")) === null || _f === void 0 ? void 0 : _f.classList.add("active");
             }
         };
         Views.prototype.load = function (view) {
@@ -356,6 +418,11 @@ var Index;
                     this.loadPlaylist(player.getPlaylist());
                     break;
                 case "costumePlaylist":
+                    break;
+                case "animation":
+                    if (animation instanceof animation_1.Animation) {
+                        animation.start();
+                    }
                     break;
             }
         };

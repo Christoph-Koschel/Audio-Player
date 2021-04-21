@@ -1,10 +1,11 @@
-import {ipcRenderer, remote} from "electron";
+import {remote} from "electron";
 import * as fs from "fs";
 import * as path from "path";
 import * as ytpl from "ytpl";
 import {Player} from "./player";
 import {IPlaylist, Playlist} from "./playlist";
 import {LocalStorage} from "./localStorage";
+import {Animation} from "./animation";
 
 const mime = require("mime");
 
@@ -12,9 +13,14 @@ export namespace Index {
     const app: Electron.App = remote.app;
     const dialog: Electron.Dialog = remote.dialog;
     const player: Player = new Player();
+    let animation: Animation | undefined;
+    let openSiteMenu: boolean = true;
     const playlist: Playlist = new Playlist(path.join(app.getPath("userData"), "playlist"));
     const localStorage: LocalStorage = new LocalStorage();
+
     export class Main {
+        private mouseInterval: NodeJS.Timeout | undefined;
+
         public constructor() {
             let params: URLSearchParams = new URLSearchParams(window.location.search);
             const view: Views = new Views();
@@ -37,11 +43,18 @@ export namespace Index {
                 localStorage.setItem("volume", "0.5");
             }
 
+            if (!localStorage.hasItem("openSiteMenu")) {
+                localStorage.setItem("openSiteMenu", "true");
+            }
+
             if (JSON.parse(<string>params.get("path")).length !== 0) {
                 player.setPlaylist(JSON.parse(<string>params.get("path")));
                 player.setIndex(0);
                 player.play();
             }
+
+            openSiteMenu = (localStorage.getItem("openSiteMenu") !== "true");
+            this.setSideMenu(false);
 
             player.setVolume(parseFloat(<string>localStorage.getItem("volume")));
             // @ts-ignore
@@ -69,6 +82,10 @@ export namespace Index {
 
                 // @ts-ignore
                 document.getElementById("terms").style.display = "none";
+            });
+
+            document.getElementById("animationBtn")?.addEventListener("click", () => {
+                view.changeView("animation");
             });
 
             // @ts-ignore
@@ -208,14 +225,14 @@ export namespace Index {
 
             document.getElementById("loadVideoURLSubmit")?.addEventListener("click", () => {
                 // @ts-ignore
-                if (document.getElementById("loadPlaylistURL").value !== "") {
+                if (document.getElementById("loadVideoURL").value !== "") {
                     // @ts-ignore
-                    player.setPlaylist([document.getElementById("loadPlaylistURL").value]);
+                    player.setPlaylist([document.getElementById("loadVideoURL").value]);
                     player.setIndex(0);
                     player.play();
 
                     // @ts-ignore
-                    document.getElementById("loadPlaylistURL").value = "";
+                    document.getElementById("loadVideoURL").value = "";
                 }
             });
 
@@ -224,6 +241,22 @@ export namespace Index {
                 document.getElementById("clearer")?.style.display = "block";
                 // @ts-ignore
                 document.getElementById("playlistView")?.style.display = "block";
+            });
+
+            window.addEventListener("mousemove", () => {
+                if (this.mouseInterval) {
+                    clearTimeout(this.mouseInterval);
+                }
+
+                // @ts-ignore
+                document.getElementById("minimizeDot").style.display = "";
+                document.body.style.cursor = "";
+
+                this.mouseInterval = setTimeout(() => {
+                    // @ts-ignore
+                    document.getElementById("minimizeDot").style.display = "none";
+                    document.body.style.cursor = "none";
+                }, 20*1000);
             });
 
             document.getElementById("playlistViewSubmit")?.addEventListener("click", () => {
@@ -331,6 +364,10 @@ export namespace Index {
                 }
             });
 
+            document.getElementById("minimizeDot")?.addEventListener("click", () => {
+                this.setSideMenu(true);
+            });
+
             window.addEventListener("resize", this.reloadStyles);
             this.reloadStyles();
             // @ts-ignore
@@ -364,17 +401,56 @@ export namespace Index {
         }
 
         public static main(): void {
+            animation = new Animation("animationCanvas", player);
             new Main();
         }
 
         private reloadStyles(): void {
             // @ts-ignore
-            document.getElementsByClassName("playlistList")[0].style.height = (window.innerHeight - 261).toString() + "px";
+            document.getElementsByClassName("playlistList")[0].style.height = (window.innerHeight - 298).toString() + "px";
 
             // @ts-ignore
             document.getElementsByClassName("playlistWrapper")[0].style.height = (window.innerHeight - 200).toString() + "px";
             // @ts-ignore
             document.getElementsByClassName("playlistWrapper")[1].style.height = (window.innerHeight - 200).toString() + "px";
+
+            if (animation instanceof Animation) {
+                animation.updateSize(openSiteMenu);
+            }
+        }
+        private setSideMenu(setOnLocalStorage: boolean): void {
+            if (openSiteMenu) {
+                // @ts-ignore
+                document.getElementsByClassName("siteMenu")[0].style.display = "none";
+                // @ts-ignore
+                document.getElementsByClassName("body")[0].style.marginLeft = "-200px";
+
+
+                // @ts-ignore
+                document.querySelector(":root").style.setProperty("--dotPoint-left", "3px");
+
+                if (setOnLocalStorage) {
+                    localStorage.setItem("openSiteMenu", "false");
+                }
+
+                openSiteMenu = false;
+            } else {
+                // @ts-ignore
+                document.getElementsByClassName("siteMenu")[0].style.display = "";
+                // @ts-ignore
+                document.getElementsByClassName("body")[0].style.marginLeft = "";
+
+                // @ts-ignore
+                document.querySelector(":root").style.setProperty("--dotPoint-left", "200px");
+
+                if (setOnLocalStorage) {
+                    localStorage.setItem("openSiteMenu", "true");
+                }
+
+                openSiteMenu = true;
+            }
+
+            this.reloadStyles();
         }
     }
 
@@ -383,27 +459,31 @@ export namespace Index {
         private youtube: HTMLElement;
         private playlist: HTMLElement;
         private costumePlaylist: HTMLElement;
-        private currentView: "home" | "youtube" | "playlist" | "costumePlaylist" = "home";
+        private animation: HTMLElement;
+        private currentView: "home" | "youtube" | "playlist" | "costumePlaylist" | "animation" = "home";
 
         constructor() {
-            // @ts-ignore
-            this.home = document.getElementById("home");
-            // @ts-ignore
-            this.youtube = document.getElementById("youtube");
-            // @ts-ignore
-            this.playlist = document.getElementById("playlist");
-            // @ts-ignore
-            this.costumePlaylist = document.getElementById("customPlaylist");
+            this.home = <HTMLElement>document.getElementById("home");
+            this.youtube = <HTMLElement>document.getElementById("youtube");
+            this.playlist = <HTMLElement>document.getElementById("playlist");
+            this.costumePlaylist = <HTMLElement>document.getElementById("customPlaylist");
+            this.animation = <HTMLElement>document.getElementById("animation");
         }
 
-        public changeView(view: "home" | "youtube" | "playlist" | "costumePlaylist"): void {
+        public changeView(view: "home" | "youtube" | "playlist" | "costumePlaylist" | "animation"): void {
             document.getElementById("homeBtn")?.classList.remove("active");
             document.getElementById("youtubeBtn")?.classList.remove("active");
+            document.getElementById("animationBtn")?.classList.remove("active");
+
+            if (animation instanceof Animation) {
+                animation.stop();
+            }
 
             this.home.style.display = "none";
             this.youtube.style.display = "none";
             this.playlist.style.display = "none";
             this.costumePlaylist.style.display = "none";
+            this.animation.style.display = "none";
             this.currentView = view;
             localStorage.setItem("view", view);
 
@@ -428,9 +508,15 @@ export namespace Index {
                 this.load("costumePlaylist");
                 this.costumePlaylist.style.display = "";
             }
+
+            if (view == "animation") {
+                this.load("animation");
+                this.animation.style.display = "";
+                document.getElementById("animationBtn")?.classList.add("active");
+            }
         }
 
-        private load(view: "home" | "youtube" | "playlist" | "costumePlaylist"): void {
+        private load(view: "home" | "youtube" | "playlist" | "costumePlaylist" | "animation"): void {
             switch (view) {
                 case "home":
                     this.loadHomeCards();
@@ -442,10 +528,15 @@ export namespace Index {
                     break;
                 case "costumePlaylist":
                     break;
+                case "animation":
+                    if (animation instanceof Animation) {
+                        animation.start();
+                    }
+                    break;
             }
         }
 
-        public getCurrentView(): "home" | "youtube" | "playlist" | "costumePlaylist" {
+        public getCurrentView(): "home" | "youtube" | "playlist" | "costumePlaylist" | "animation" {
             return this.currentView;
         }
 
