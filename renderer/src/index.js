@@ -16,11 +16,13 @@ var Index;
     var dialog = electron_1.remote.dialog;
     var player = new player_1.Player();
     var animation;
+    var openSiteMenu = true;
     var playlist = new playlist_1.Playlist(path.join(app.getPath("userData"), "playlist"));
     var localStorage = new localStorage_1.LocalStorage();
     var Main = (function () {
         function Main() {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1;
+            var _this = this;
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2;
             var params = new URLSearchParams(window.location.search);
             var view = new Views();
             playlist.build("list", document.getElementsByClassName("playlistList")[0], function (playlist) {
@@ -38,11 +40,16 @@ var Index;
             if (!localStorage.hasItem("volume")) {
                 localStorage.setItem("volume", "0.5");
             }
+            if (!localStorage.hasItem("openSiteMenu")) {
+                localStorage.setItem("openSiteMenu", "true");
+            }
             if (JSON.parse(params.get("path")).length !== 0) {
                 player.setPlaylist(JSON.parse(params.get("path")));
                 player.setIndex(0);
                 player.play();
             }
+            openSiteMenu = (localStorage.getItem("openSiteMenu") !== "true");
+            this.setSideMenu(false);
             player.setVolume(parseFloat(localStorage.getItem("volume")));
             document.getElementById("volumeControl").value = parseFloat(localStorage.getItem("volume")) * 100;
             (_a = document.getElementById("winClose")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", function () {
@@ -173,17 +180,28 @@ var Index;
                 });
             });
             (_u = document.getElementById("loadVideoURLSubmit")) === null || _u === void 0 ? void 0 : _u.addEventListener("click", function () {
-                if (document.getElementById("loadPlaylistURL").value !== "") {
-                    player.setPlaylist([document.getElementById("loadPlaylistURL").value]);
+                if (document.getElementById("loadVideoURL").value !== "") {
+                    player.setPlaylist([document.getElementById("loadVideoURL").value]);
                     player.setIndex(0);
                     player.play();
-                    document.getElementById("loadPlaylistURL").value = "";
+                    document.getElementById("loadVideoURL").value = "";
                 }
             });
             (_v = document.getElementsByClassName("addPlaylistButton")[0]) === null || _v === void 0 ? void 0 : _v.addEventListener("click", function () {
                 var _a, _b;
                 (_a = document.getElementById("clearer")) === null || _a === void 0 ? void 0 : _a.style.display = "block";
                 (_b = document.getElementById("playlistView")) === null || _b === void 0 ? void 0 : _b.style.display = "block";
+            });
+            window.addEventListener("mousemove", function () {
+                if (_this.mouseInterval) {
+                    clearTimeout(_this.mouseInterval);
+                }
+                document.getElementById("minimizeDot").style.display = "";
+                document.body.style.cursor = "";
+                _this.mouseInterval = setTimeout(function () {
+                    document.getElementById("minimizeDot").style.display = "none";
+                    document.body.style.cursor = "none";
+                }, 20 * 1000);
             });
             (_w = document.getElementById("playlistViewSubmit")) === null || _w === void 0 ? void 0 : _w.addEventListener("click", function () {
                 var _a, _b;
@@ -276,6 +294,9 @@ var Index;
                     view.changeView("home");
                 }
             });
+            (_2 = document.getElementById("minimizeDot")) === null || _2 === void 0 ? void 0 : _2.addEventListener("click", function () {
+                _this.setSideMenu(true);
+            });
             window.addEventListener("resize", this.reloadStyles);
             this.reloadStyles();
             view.changeView(localStorage.getItem("view"));
@@ -311,8 +332,29 @@ var Index;
             document.getElementsByClassName("playlistWrapper")[0].style.height = (window.innerHeight - 200).toString() + "px";
             document.getElementsByClassName("playlistWrapper")[1].style.height = (window.innerHeight - 200).toString() + "px";
             if (animation instanceof animation_1.Animation) {
-                animation.updateSize();
+                animation.updateSize(openSiteMenu);
             }
+        };
+        Main.prototype.setSideMenu = function (setOnLocalStorage) {
+            if (openSiteMenu) {
+                document.getElementsByClassName("siteMenu")[0].style.display = "none";
+                document.getElementsByClassName("body")[0].style.marginLeft = "-200px";
+                document.querySelector(":root").style.setProperty("--dotPoint-left", "3px");
+                if (setOnLocalStorage) {
+                    localStorage.setItem("openSiteMenu", "false");
+                }
+                openSiteMenu = false;
+            }
+            else {
+                document.getElementsByClassName("siteMenu")[0].style.display = "";
+                document.getElementsByClassName("body")[0].style.marginLeft = "";
+                document.querySelector(":root").style.setProperty("--dotPoint-left", "200px");
+                if (setOnLocalStorage) {
+                    localStorage.setItem("openSiteMenu", "true");
+                }
+                openSiteMenu = true;
+            }
+            this.reloadStyles();
         };
         return Main;
     }());

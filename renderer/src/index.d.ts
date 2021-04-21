@@ -1,9 +1,11 @@
 import { IPlaylist } from "./playlist";
 export declare namespace Index {
     class Main {
+        private mouseInterval;
         constructor();
         static main(): void;
         private reloadStyles;
+        private setSideMenu;
     }
     class Views {
         private home;

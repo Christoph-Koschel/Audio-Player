@@ -8,7 +8,7 @@ export declare class Animation {
     constructor(id: string, player: Player);
     start(): void;
     stop(): void;
-    updateSize(): void;
+    updateSize(openSiteMenu: boolean): void;
     private clear;
     private outerCircle;
     private innerCircle;

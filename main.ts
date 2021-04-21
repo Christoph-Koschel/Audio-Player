@@ -8,7 +8,7 @@ const mime = require("mime");
 app.on("ready",() => {
     autoUpdater.on("update-downloaded", () => {
         autoUpdater.quitAndInstall();
-    })
+    });
 
     autoUpdater.checkForUpdates();
 

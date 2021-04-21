@@ -25,11 +25,19 @@ export class Animation {
         this.clear();
     }
 
-    public updateSize(): void {
+    public updateSize(openSiteMenu: boolean): void {
         // @ts-ignore
         this.canvas.height = window.innerHeight - 180;
-        // @ts-ignore
-        this.canvas.width = window.innerWidth - 240;
+
+        if (openSiteMenu) {
+            // @ts-ignore
+            this.canvas.width = window.innerWidth - 240;
+        } else {
+            // @ts-ignore
+            this.canvas.width = window.innerWidth - 40;
+        }
+
+
     }
 
     private clear() {

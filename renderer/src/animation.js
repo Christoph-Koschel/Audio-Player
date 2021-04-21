@@ -17,9 +17,14 @@ var Animation = (function () {
         this.loop = false;
         this.clear();
     };
-    Animation.prototype.updateSize = function () {
+    Animation.prototype.updateSize = function (openSiteMenu) {
         this.canvas.height = window.innerHeight - 180;
-        this.canvas.width = window.innerWidth - 240;
+        if (openSiteMenu) {
+            this.canvas.width = window.innerWidth - 240;
+        }
+        else {
+            this.canvas.width = window.innerWidth - 40;
+        }
     };
     Animation.prototype.clear = function () {
         var ctx = this.canvas.getContext("2d");

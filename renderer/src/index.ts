@@ -1,4 +1,4 @@
-import {ipcRenderer, remote} from "electron";
+import {remote} from "electron";
 import * as fs from "fs";
 import * as path from "path";
 import * as ytpl from "ytpl";
@@ -14,10 +14,12 @@ export namespace Index {
     const dialog: Electron.Dialog = remote.dialog;
     const player: Player = new Player();
     let animation: Animation | undefined;
+    let openSiteMenu: boolean = true;
     const playlist: Playlist = new Playlist(path.join(app.getPath("userData"), "playlist"));
     const localStorage: LocalStorage = new LocalStorage();
 
     export class Main {
+        private mouseInterval: NodeJS.Timeout | undefined;
 
         public constructor() {
             let params: URLSearchParams = new URLSearchParams(window.location.search);
@@ -41,11 +43,18 @@ export namespace Index {
                 localStorage.setItem("volume", "0.5");
             }
 
+            if (!localStorage.hasItem("openSiteMenu")) {
+                localStorage.setItem("openSiteMenu", "true");
+            }
+
             if (JSON.parse(<string>params.get("path")).length !== 0) {
                 player.setPlaylist(JSON.parse(<string>params.get("path")));
                 player.setIndex(0);
                 player.play();
             }
+
+            openSiteMenu = (localStorage.getItem("openSiteMenu") !== "true");
+            this.setSideMenu(false);
 
             player.setVolume(parseFloat(<string>localStorage.getItem("volume")));
             // @ts-ignore
@@ -216,14 +225,14 @@ export namespace Index {
 
             document.getElementById("loadVideoURLSubmit")?.addEventListener("click", () => {
                 // @ts-ignore
-                if (document.getElementById("loadPlaylistURL").value !== "") {
+                if (document.getElementById("loadVideoURL").value !== "") {
                     // @ts-ignore
-                    player.setPlaylist([document.getElementById("loadPlaylistURL").value]);
+                    player.setPlaylist([document.getElementById("loadVideoURL").value]);
                     player.setIndex(0);
                     player.play();
 
                     // @ts-ignore
-                    document.getElementById("loadPlaylistURL").value = "";
+                    document.getElementById("loadVideoURL").value = "";
                 }
             });
 
@@ -232,6 +241,22 @@ export namespace Index {
                 document.getElementById("clearer")?.style.display = "block";
                 // @ts-ignore
                 document.getElementById("playlistView")?.style.display = "block";
+            });
+
+            window.addEventListener("mousemove", () => {
+                if (this.mouseInterval) {
+                    clearTimeout(this.mouseInterval);
+                }
+
+                // @ts-ignore
+                document.getElementById("minimizeDot").style.display = "";
+                document.body.style.cursor = "";
+
+                this.mouseInterval = setTimeout(() => {
+                    // @ts-ignore
+                    document.getElementById("minimizeDot").style.display = "none";
+                    document.body.style.cursor = "none";
+                }, 20*1000);
             });
 
             document.getElementById("playlistViewSubmit")?.addEventListener("click", () => {
@@ -339,6 +364,10 @@ export namespace Index {
                 }
             });
 
+            document.getElementById("minimizeDot")?.addEventListener("click", () => {
+                this.setSideMenu(true);
+            });
+
             window.addEventListener("resize", this.reloadStyles);
             this.reloadStyles();
             // @ts-ignore
@@ -386,8 +415,42 @@ export namespace Index {
             document.getElementsByClassName("playlistWrapper")[1].style.height = (window.innerHeight - 200).toString() + "px";
 
             if (animation instanceof Animation) {
-                animation.updateSize();
+                animation.updateSize(openSiteMenu);
             }
+        }
+        private setSideMenu(setOnLocalStorage: boolean): void {
+            if (openSiteMenu) {
+                // @ts-ignore
+                document.getElementsByClassName("siteMenu")[0].style.display = "none";
+                // @ts-ignore
+                document.getElementsByClassName("body")[0].style.marginLeft = "-200px";
+
+
+                // @ts-ignore
+                document.querySelector(":root").style.setProperty("--dotPoint-left", "3px");
+
+                if (setOnLocalStorage) {
+                    localStorage.setItem("openSiteMenu", "false");
+                }
+
+                openSiteMenu = false;
+            } else {
+                // @ts-ignore
+                document.getElementsByClassName("siteMenu")[0].style.display = "";
+                // @ts-ignore
+                document.getElementsByClassName("body")[0].style.marginLeft = "";
+
+                // @ts-ignore
+                document.querySelector(":root").style.setProperty("--dotPoint-left", "200px");
+
+                if (setOnLocalStorage) {
+                    localStorage.setItem("openSiteMenu", "true");
+                }
+
+                openSiteMenu = true;
+            }
+
+            this.reloadStyles();
         }
     }
 
