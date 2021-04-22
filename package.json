@@ -1,21 +1,21 @@
 {
   "name": "Sirent",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "",
   "main": "main.js",
   "scripts": {
     "start": "tsc && electron .",
     "dev": "tsc && electron . dev",
     "build": "tsc && electron-builder build --win --publish never --config electron-builder.json",
-    "compile": "tsc",
-    "deploy": "tsc && electron-builder build --win --publish always --config electron-builder.json"
+    "compile": "tsc"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/Christoph-Koschel/Audio-Player.git"
   },
   "keywords": [],
-  "author": "Christoph Koschel",
+  "author": "HexaStudio",
+  "homepage": "https://hexa-studio.de/",
   "license": "ISC",
   "types": "./src/index.d.ts",
   "devDependencies": {

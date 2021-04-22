@@ -20,7 +20,7 @@ electron_1.app.on("ready", function () {
     var args = [];
     for (var i = 0; i < process.argv.length; i++) {
         var mimeType = mime.getType(process.argv[i]);
-        if (mimeType === "audio/mpeg" || mimeType === "audio/wave") {
+        if (mimeType === "audio/mpeg" || mimeType === "audio/wav") {
             args.push(process.argv[i]);
         }
     }
