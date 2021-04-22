@@ -22,7 +22,7 @@ app.on("ready",() => {
     let args: string[] = [];
     for (let i = 0; i < process.argv.length; i++) {
         let mimeType: string = mime.getType(process.argv[i]);
-        if (mimeType === "audio/mpeg" || mimeType === "audio/wave") {
+        if (mimeType === "audio/mpeg" || mimeType === "audio/wav") {
             args.push(process.argv[i]);
         }
     }
